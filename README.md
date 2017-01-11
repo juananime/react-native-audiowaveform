@@ -28,7 +28,7 @@
 ```javascript
 import WaveForm from 'react-native-audiowaveform';
 
-<WaveForm style={styles.waveform} source={require('./audio/intro.mp3')}>
+<WaveForm source={require('./path/to/your/file.mp3')}>
 </WaveForm>
 
 
