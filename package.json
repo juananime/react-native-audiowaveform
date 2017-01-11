@@ -1,7 +1,7 @@
 
 {
   "name": "react-native-audiowaveform",
-  "version": "1.0.35",
+  "version": "1.0.36",
   "description": "Audio Waveform visualization and sound renderization for React Native",
   "main": "index.js",
   "scripts": {
