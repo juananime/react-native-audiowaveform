@@ -8,6 +8,7 @@
 
 #import "OGWaverformView.h"
 
+
 @implementation OGWaverformView {
     __weak RCTBridge *_bridge;
     
@@ -19,6 +20,16 @@
 #define decibel(amplitude) (20.0 * log10(absX(amplitude)/32767.0))
 #define imgExt @"png"
 #define imageToData(x) UIImagePNGRepresentation(x)
+
+-(void)setWaveFormStyle:(NSDictionary *)waveFormStyle{
+    _leftWaveColor = [RCTConvert UIColor:[waveFormStyle objectForKey:@"leftWaveColor"]];
+    _rightWaveColor = [RCTConvert UIColor:[waveFormStyle objectForKey:@"rightWaveColor"]];
+    
+    
+ NSLog(@"AAAAAAAAAA");
+    
+    
+}
 
 -(void)setSrc:(NSDictionary *)src{
    
@@ -40,11 +51,12 @@
         
         NSURL * localUrl = [NSURL fileURLWithPath: filePath];
         
-        AVURLAsset *asset = [AVURLAsset assetWithURL: localUrl];
+        _asset = [AVURLAsset assetWithURL: localUrl];
         
-
+[self setImage:[UIImage imageWithData:[self renderPNGAudioPictogramLogForAssett:_asset]]];
         
-        [self setImage:[UIImage imageWithData:[self renderPNGAudioPictogramLogForAssett:asset]]];
+        
+        NSLog(@"DEDEDEDEDEDEED");
     }
     
 
@@ -61,15 +73,16 @@
     UIGraphicsBeginImageContext(imageSize);
     CGContextRef context = UIGraphicsGetCurrentContext();
     
-    CGContextSetFillColorWithColor(context, [UIColor blackColor].CGColor);
+    CGContextSetFillColorWithColor(context, [UIColor clearColor].CGColor);
     CGContextSetAlpha(context,1.0);
     CGRect rect;
     rect.size = imageSize;
     rect.origin.x = 0;
     rect.origin.y = 0;
-    
-    CGColorRef leftcolor = [[UIColor grayColor] CGColor];
-    CGColorRef rightcolor = [[UIColor grayColor] CGColor];
+    NSLog(@"RColor : %@",_rightWaveColor);
+    NSLog(@"LColor : %@",_leftWaveColor);
+    CGColorRef leftcolor = [_leftWaveColor CGColor];
+    CGColorRef rightcolor = [_rightWaveColor CGColor];
     
     CGContextFillRect(context, rect);
     

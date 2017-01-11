@@ -11,9 +11,9 @@
 
 @implementation OGWaveManager
 
-
-
+RCT_EXPORT_VIEW_PROPERTY(waveFormStyle, NSDictionary);
 RCT_EXPORT_VIEW_PROPERTY(src, NSDictionary);
+
 
 
 - (UIView *)view

@@ -15,8 +15,12 @@
 
 
 @property(nonatomic) NSDictionary * src;
+@property(nonatomic) NSDictionary * waveFormStyle;
+@property(nonatomic) UIColor * leftWaveColor;
+@property(nonatomic) UIColor * rightWaveColor;
+@property(nonatomic) AVURLAsset *asset;
+
 @property (nonatomic, strong) AVAudioPlayer *_audioPlayer;
-@property (nonatomic, strong) AVPlayerItem *pItem;
 
 - (instancetype)initWithBridge:(RCTBridge *)bridge NS_DESIGNATED_INITIALIZER;
 

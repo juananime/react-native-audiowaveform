@@ -1,6 +1,7 @@
 'use strict';
 import React, {Component, PropTypes} from 'react';
 var {
+    processColor,
     StyleSheet,
     View,
     requireNativeComponent
@@ -8,20 +9,22 @@ var {
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 
+
 const WaveForm = React.createClass({
     propTypes: {
-        /* Wrapper component */
+        waveFormStyle:PropTypes.shape({
+            leftWaveColor: React.PropTypes.string,
+            rightWaveColor: React.PropTypes.string
+        }),
         source: PropTypes.oneOfType([
             PropTypes.shape({
                 uri: PropTypes.string
             }),
             // Opaque type returned by require('./video.mp4')
             PropTypes.number
-        ]),
-        waveFormStyle:PropTypes.shape({
-            leftWaveColor: React.PropTypes.string,
-            rightWaveColor: React.PropTypes.string
-        }),
+        ])
+
+    },
     render: function () {
         const source = resolveAssetSource(this.props.source) || {};
 
@@ -33,8 +36,17 @@ const WaveForm = React.createClass({
         const isNetwork = !!(uri && uri.match(/^https?:/));
         const isAsset = !!(uri && uri.match(/^(assets-library|file|content|ms-appx|ms-appdata):/));
 
+
+        this.props.waveFormStyle.leftWaveColor=processColor(this.props.waveFormStyle.leftWaveColor)
+        this.props.waveFormStyle.rightWaveColor=processColor(this.props.waveFormStyle.rightWaveColor)
+        console.log("FRFR: "+this.props.waveFormStyle.leftWaveColor);
+
         const nativeProps = Object.assign({}, this.props);
         Object.assign(nativeProps, {
+            waveFormStyle:{
+                rightWaveColor:this.props.waveFormStyle.rightWaveColor,
+                leftWaveColor:this.props.waveFormStyle.leftWaveColor,
+            },
             src: {
                 uri,
                 isNetwork,
@@ -43,6 +55,7 @@ const WaveForm = React.createClass({
                 mainVer: source.mainVer || 0,
                 patchVer: source.patchVer || 0,
             }
+
         });
 
 
