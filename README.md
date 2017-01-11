@@ -31,7 +31,10 @@ Android is on progress, so right now working just for iOS.
 ```javascript
 import WaveForm from 'react-native-audiowaveform';
 
-<WaveForm source={require('./path/to/your/file.mp3')}  waveFormStyle={{leftWaveColor:'red', rightWaveColor:'#ffffff'} >
+<WaveForm 
+    source={require('./path/to/your/file.mp3')}  
+    waveFormStyle={{leftWaveColor:'red', rightWaveColor:'#ffffff'} 
+>
 </WaveForm>
 
 
