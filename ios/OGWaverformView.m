@@ -21,21 +21,11 @@
 #define imageToData(x) UIImagePNGRepresentation(x)
 
 -(void)setSrc:(NSDictionary *)src{
-    NSLog(@"CDCDCD :::: %@",src);
+   
     
     //Retrieve audio file
     
     NSString *uri =  [src objectForKey:@"uri"];
-    
-    //AVURLAsset * urlA = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:uri] options:nil];
-    //[self setImage:[UIImage imageWithData:[self renderPNGAudioPictogramLogForAssett:urlA]]];
-    
-
-    
-    //_pItem = [AVPlayerItem new];
-    
-     //  [_pItem addObserver:self forKeyPath:@"status" options:0 context:nil];
-    
     
     
     NSURL  *remoteUrl = [NSURL URLWithString:uri];
@@ -52,51 +42,15 @@
         
         AVURLAsset *asset = [AVURLAsset assetWithURL: localUrl];
         
-        NSLog(@"XSXSXSX ::: %@",asset);
+
         
         [self setImage:[UIImage imageWithData:[self renderPNGAudioPictogramLogForAssett:asset]]];
     }
     
 
-    // _pItem= [AVPlayerItem playerItemWithURL:[NSURL URLWithString:uri]];
-   
 
-    /**_pItem dispatchQueue =
-    dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(dispatchQueue, ^(void){
-        NSString *_mp3file = uri;
-        NSData   *_mp3Data = [NSData dataWithContentsOfURL:[NSURL URLWithString: _mp3file]];
-        NSError  *_error   = nil;
-        
-        self._audioPlayer = [[AVAudioPlayer alloc] initWithData:_mp3Data error:&_error];
-        
-        if (self._audioPlayer != nil)
-        {
-            self._audioPlayer.delegate = self;
-            if ([self._audioPlayer prepareToPlay] && [self._audioPlayer play])
-            {
-                NSLog(@"Successfully started playing");
-            } else {
-                NSLog(@"Failed to play");
-            }
-        } else {
-            NSLog(@"Failed to instanciate player");
-        }
-    });
-    **/
 }
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
-                        change:(NSDictionary *)change context:(void *)context {
-      NSLog(@"WRWTWRTWRT");
-    if ([keyPath isEqualToString:@"status"]) {
-        AVPlayerItem *pItem = (AVPlayerItem *)object;
-        if (pItem.status == AVPlayerItemStatusReadyToPlay) {
-            // Here you can access to the player item's asset
-            // e.g.: self.asset = (AVURLAsset *)pItem.asset;
-            NSLog(@"WRWTWRTWRT");
-        }
-    }
-}
+
 -(UIImage *) audioImageLogGraph:(Float32 *) samples
                    normalizeMax:(Float32) normalizeMax
                     sampleCount:(NSInteger) sampleCount
@@ -114,8 +68,8 @@
     rect.origin.x = 0;
     rect.origin.y = 0;
     
-    CGColorRef leftcolor = [[UIColor whiteColor] CGColor];
-    CGColorRef rightcolor = [[UIColor redColor] CGColor];
+    CGColorRef leftcolor = [[UIColor grayColor] CGColor];
+    CGColorRef rightcolor = [[UIColor grayColor] CGColor];
     
     CGContextFillRect(context, rect);
     

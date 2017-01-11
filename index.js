@@ -18,12 +18,12 @@ const WaveForm = React.createClass({
             // Opaque type returned by require('./video.mp4')
             PropTypes.number
         ]),
-
-    },
+        waveFormStyle:PropTypes.shape({
+            leftWaveColor: React.PropTypes.string,
+            rightWaveColor: React.PropTypes.string
+        }),
     render: function () {
         const source = resolveAssetSource(this.props.source) || {};
-
-        console.log('CXDCDCCD '+ source.uri)
 
         let uri = source.uri;
         if (uri && uri.match(/^\//)) {
