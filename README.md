@@ -5,7 +5,7 @@ Very early stage, will add more configuration options and styles eventually.
 Android is on progress, so right now working just for iOS.
 
 
-<img src="/screenshots/screen3.png" alt="sounWaves" style="width: 60px;"/>
+<img src="/screenshots/screen4.png" alt="sounWaves" style="width: 60px;"/>
 ## Getting started
 
 `$ npm react-native-audiowaveform --save`
