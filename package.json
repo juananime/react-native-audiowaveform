@@ -2,7 +2,7 @@
 {
   "name": "react-native-waveform",
   "version": "1.0.0",
-  "description": "",
+  "description": "Audio Waveform visualization and rendered for React Native",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,11 +10,9 @@
   "keywords": [
     "react-native"
   ],
-  "author": "",
+  "author": "otomogroove 2017",
   "license": "",
   "peerDependencies": {
-    "react-native": "^0.29.0",
-    "react-native-windows": "^0.29.0"
-
+    "react-native": "^0.29.0"
   }
 }
