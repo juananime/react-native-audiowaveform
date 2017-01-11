@@ -1,7 +1,7 @@
 
 # react-native-waveform
 
-<img src="/screenshots/screen1.png" alt="Drawing" style="width: 60px;"/>
+<img src="https://github.com/juananime/react-native-audiowaveform/tree/master/screenshots" alt="Drawing" style="width: 60px;"/>
 ## Getting started
 
 `$ npm react-native-audiowaveform --save`
