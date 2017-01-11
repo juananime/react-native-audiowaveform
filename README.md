@@ -1,6 +1,7 @@
 
 # react-native-react-native-waveform
-![Alt text](/screenshots/screen1.png =100x600 "React Native waveform")
+
+<img src="/screenshots/screen1.png" alt="Drawing" style="width: 200px;"/>
 ## Getting started
 
 `$ npm install react-native-react-native-waveform --save`
