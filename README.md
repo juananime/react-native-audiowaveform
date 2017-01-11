@@ -33,7 +33,7 @@ import WaveForm from 'react-native-audiowaveform';
 
 <WaveForm 
     source={require('./path/to/your/file.mp3')}  
-    waveFormStyle={{leftWaveColor:'red', rightWaveColor:'#ffffff'} 
+    waveFormStyle={{leftWaveColor:'red', rightWaveColor:'#ffffff'}}
 >
 </WaveForm>
 
