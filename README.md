@@ -1,5 +1,5 @@
 
-# react-native-waveform
+# react-native-audiowaveform
 React Native component for visuaization of audio files waveform.
 Very early stage, will add more configuration options and styles eventually.
 Android is on progress, so right now working just for iOS.
