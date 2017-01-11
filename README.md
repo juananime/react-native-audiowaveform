@@ -1,5 +1,6 @@
 
 # react-native-waveform
+`$ React Native component for render the waveform of audio files. `
 
 <img src="/screenshots/screen1.png" alt="Drawing" style="width: 60px;"/>
 ## Getting started
