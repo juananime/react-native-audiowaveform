@@ -12,9 +12,14 @@ import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource'
 
 const WaveForm = React.createClass({
     propTypes: {
+        ...View.propTypes,
+
         waveFormStyle:PropTypes.shape({
             leftWaveColor: React.PropTypes.string,
             rightWaveColor: React.PropTypes.string
+        }),
+        src: PropTypes.shape({
+            uri: PropTypes.string,
         }),
         source: PropTypes.oneOfType([
             PropTypes.shape({
@@ -39,7 +44,7 @@ const WaveForm = React.createClass({
 
         this.props.waveFormStyle.leftWaveColor=processColor(this.props.waveFormStyle.leftWaveColor)
         this.props.waveFormStyle.rightWaveColor=processColor(this.props.waveFormStyle.rightWaveColor)
-        console.log("FRFR: "+this.props.waveFormStyle.leftWaveColor);
+
 
         const nativeProps = Object.assign({}, this.props);
         Object.assign(nativeProps, {
@@ -48,7 +53,7 @@ const WaveForm = React.createClass({
                 leftWaveColor:this.props.waveFormStyle.leftWaveColor,
             },
             src: {
-                uri,
+                uri:uri,
                 isNetwork,
                 isAsset,
                 type: source.type,
@@ -58,18 +63,14 @@ const WaveForm = React.createClass({
 
         });
 
-
+        console.log("FRFR: "+nativeProps.src.uri);
         return <OGWaverformView {...nativeProps} />;
     }
 
 });
 
-var OGWaverformView = requireNativeComponent('OGWave', WaveForm,
-    {nativeOnly:{
-        src:true
-    }}
-);
-//var NativeHTMLWebView = requireNativeComponent('AIBHTMLWebView', _HTMLWebView);
+var OGWaverformView = requireNativeComponent('OGWave', WaveForm);
+
 
 module.exports = WaveForm;
 
