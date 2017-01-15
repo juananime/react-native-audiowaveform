@@ -22,6 +22,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
+import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -30,6 +32,16 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import com.ringdroid.soundfile.SoundFile;
+
+import java.io.BufferedInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.math.BigInteger;
+import java.net.URL;
+import java.net.URLConnection;
+import java.security.SecureRandom;
 
 /**
  * WaveformView is an Android view that displays a visual representation
@@ -45,6 +57,129 @@ import com.ringdroid.soundfile.SoundFile;
  * the selected part of the waveform in a different color.
  */
 public class WaveformView extends View {
+    public void setmURI(String mURI) {
+        this.mURI = mURI;
+        new DownloadFileFromURL().execute(this.mURI);
+
+
+
+
+
+
+
+
+    }
+
+    /**
+     * Background Async Task to download file
+     * */
+    class DownloadFileFromURL extends AsyncTask<String, String, SoundFile> {
+
+
+        String filePath = Environment.getExternalStorageDirectory().toString() + "/"+random()+".mp3";
+
+        /**
+         * Before starting background thread Show Progress Bar Dialog
+         * */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        /**
+         * Downloading file in background thread
+         * */
+        @Override
+        protected SoundFile doInBackground(String... f_url) {
+            int count;
+            SoundFile soundFile = null;
+            try {
+                URL url = new URL(f_url[0]);
+                URLConnection conection = url.openConnection();
+                conection.connect();
+
+                // this will be useful so that you can show a tipical 0-100%
+                // progress bar
+                int lenghtOfFile = conection.getContentLength();
+
+                // download the file
+                InputStream input = new BufferedInputStream(url.openStream(),
+                        8192);
+
+                // Output stream
+                OutputStream output = new FileOutputStream(filePath);
+
+                byte data[] = new byte[1024];
+
+                long total = 0;
+
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    // publishing the progress....
+                    // After this onProgressUpdate will be called
+                    publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+
+                    // writing data to file
+                    output.write(data, 0, count);
+                }
+
+                // flushing output
+                output.flush();
+
+                // closing streams
+                output.close();
+                input.close();
+                Log.e("XSXGOT","Audio file complented + "+filePath);
+
+            } catch (Exception e) {
+                Log.e("XSXGOT Error: ", e.getMessage());
+            }
+
+            try {
+                soundFile = SoundFile.create(filePath,null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (SoundFile.InvalidInputException e) {
+                e.printStackTrace();
+            }
+
+            return soundFile;
+        }
+
+        /**
+         * Updating progress bar
+         * */
+        protected void onProgressUpdate(String... progress) {
+            // setting progress percentage
+
+        }
+
+
+
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        @Override
+        protected void onPostExecute(SoundFile soundFile) {
+            // dismiss the dialog after the file was downloaded
+            if(soundFile!=null) {
+                setSoundFile(soundFile);
+                recomputeHeights(1f);
+                invalidate();
+            }else{
+                Log.e("XSXGOT","soundfile is null");
+            }
+
+        }
+
+    }
+
+
+    private   String random() {
+        return new BigInteger(130, new SecureRandom()).toString(32);
+    }
+
     public interface WaveformListener {
         public void waveformTouchStart(float x);
         public void waveformTouchMove(float x);
@@ -56,6 +191,7 @@ public class WaveformView extends View {
     };
 
     // Colors
+    private Paint teswtPaint;
     private Paint mGridPaint;
     private Paint mSelectedLinePaint;
     private Paint mUnselectedLinePaint;
@@ -63,6 +199,8 @@ public class WaveformView extends View {
     private Paint mBorderLinePaint;
     private Paint mPlaybackLinePaint;
     private Paint mTimecodePaint;
+
+    private String mURI;
 
     private SoundFile mSoundFile;
     private int[] mLenByZoomLevel;
@@ -90,19 +228,23 @@ public class WaveformView extends View {
         // We don't want keys, the markers get these
         setFocusable(false);
 
-        Resources res = getResources();
         mGridPaint = new Paint();
         mGridPaint.setAntiAlias(false);
         mGridPaint.setColor(Color.GREEN);
+
+        teswtPaint = new Paint();
+        teswtPaint.setAntiAlias(false);
+        teswtPaint.setColor(Color.WHITE);
+
         mSelectedLinePaint = new Paint();
         mSelectedLinePaint.setAntiAlias(false);
         mSelectedLinePaint.setColor(Color.WHITE);
         mUnselectedLinePaint = new Paint();
         mUnselectedLinePaint.setAntiAlias(false);
-        mUnselectedLinePaint.setColor(Color.BLACK);
+        mUnselectedLinePaint.setColor(Color.WHITE);
         mUnselectedBkgndLinePaint = new Paint();
         mUnselectedBkgndLinePaint.setAntiAlias(false);
-        mUnselectedBkgndLinePaint.setColor(Color.BLUE);
+        mUnselectedBkgndLinePaint.setColor(Color.TRANSPARENT);
         mBorderLinePaint = new Paint();
         mBorderLinePaint.setAntiAlias(true);
         mBorderLinePaint.setStrokeWidth(1.5f);
@@ -274,11 +416,22 @@ public class WaveformView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        Log.e("XSXGOT","drawingnngng");
+        boolean test = true;
+
+        if(test) {
+
+            Log.e("XSXGOT","drawingnngng :: "+this.toString());
+            canvas.drawCircle(0, 0, 50, teswtPaint);
+
+
+            //return;
+        }
+
+
         if (mSoundFile == null)
             return;
 
-        if (mHeightsAtThisZoomLevel == null)
+       if (mHeightsAtThisZoomLevel == null)
             computeIntsForThisZoomLevel();
 
 
@@ -287,7 +440,7 @@ public class WaveformView extends View {
         // Draw waveform
         int measuredWidth = getMeasuredWidth();
         int measuredHeight = getMeasuredHeight();
-        int start = mOffset;
+        int start = 0;
         int width = mHeightsAtThisZoomLevel.length - start;
         int ctr = measuredHeight / 2;
 
@@ -295,7 +448,7 @@ public class WaveformView extends View {
             width = measuredWidth;
 
         // Draw grid
-        double onePixelInSecs = pixelsToSeconds(1);
+       /** double onePixelInSecs = pixelsToSeconds(1);
         boolean onlyEveryFiveSecs = (onePixelInSecs > 1.0 / 50.0);
         double fractionalSecs = mOffset * onePixelInSecs;
         int integerSecs = (int) fractionalSecs;
@@ -310,10 +463,21 @@ public class WaveformView extends View {
                     canvas.drawLine(i, 0, i, measuredHeight, mGridPaint);
                 }
             }
+        }**/
+        int i = 0;
+        // Draw waveform
+
+        for (i = 0; i < width; i++) {
+            Paint paint;
+           // drawWaveformLine(canvas, i, 0, measuredHeight,mUnselectedBkgndLinePaint);
+            paint = mUnselectedLinePaint;
+
+            canvas.drawLine(i, ctr - mHeightsAtThisZoomLevel[start + i], i, ctr + 1 + mHeightsAtThisZoomLevel[start + i], paint);
+           // Log.e("XSXGOTX","ctr - mHeightsAtThisZoomLevel[start + i] :: "+ (ctr - mHeightsAtThisZoomLevel[start + i]));
+          //  Log.e("XSXGOTX","ctr + 1 + mHeightsAtThisZoomLevel[start + i]:: "+ (ctr + 1 + mHeightsAtThisZoomLevel[start + i]));
         }
 
-        // Draw waveform
-        for (i = 0; i < width; i++) {
+        /**for (i = 0; i < width; i++) {
             Paint paint;
             if (i + start >= mSelectionStart &&
                 i + start < mSelectionEnd) {
@@ -332,27 +496,27 @@ public class WaveformView extends View {
             if (i + start == mPlaybackPos) {
                 canvas.drawLine(i, 0, i, measuredHeight, mPlaybackLinePaint);
             }
-        }
+        }**/
 
         // If we can see the right edge of the waveform, draw the
         // non-waveform area to the right as unselected
-        for (i = width; i < measuredWidth; i++) {
-            drawWaveformLine(canvas, i, 0, measuredHeight,
-                             mUnselectedBkgndLinePaint);
-        }
+       // for (i = width; i < measuredWidth; i++) {
+           // drawWaveformLine(canvas, i, 0, measuredHeight,
+                            // mUnselectedBkgndLinePaint);
+       // }
 
         // Draw borders
-        canvas.drawLine(
+        /**canvas.drawLine(
             mSelectionStart - mOffset + 0.5f, 30,
             mSelectionStart - mOffset + 0.5f, measuredHeight,
             mBorderLinePaint);
         canvas.drawLine(
             mSelectionEnd - mOffset + 0.5f, 0,
             mSelectionEnd - mOffset + 0.5f, measuredHeight - 30,
-            mBorderLinePaint);
+            mBorderLinePaint);**/
 
         // Draw timecode
-        double timecodeIntervalSecs = 1.0;
+       /** double timecodeIntervalSecs = 1.0;
         if (timecodeIntervalSecs / onePixelInSecs < 50) {
             timecodeIntervalSecs = 5.0;
         }
@@ -391,7 +555,7 @@ public class WaveformView extends View {
 
         if (mListener != null) {
             mListener.waveformDraw();
-        }
+        }**/
     }
 
     /**
