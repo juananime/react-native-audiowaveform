@@ -3,9 +3,7 @@
 React Native component for visuaization of audio files waveform.
 Very early stage, will add more configuration options and styles eventually.
 
-Regarding Android is ready with waveform's rederization and audio playback. 
-
-It's been implemented an adaptation of the ringdroid audio libraries, but those need much performance improvement, working on it...
+Regarding Android is ready with waveform's rederization and audio playback. Thus has been implemented adapting the ringDroid audio libraries, but those need much performance improvement, working on it...
 
 
 
