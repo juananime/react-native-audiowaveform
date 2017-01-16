@@ -1,86 +1,33 @@
 package com.otomogroove.OGReactNativeWaveform;
 
-import android.os.AsyncTask;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.ViewGroup;
 
+import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.LifecycleEventListener;
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
-import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.views.image.ReactImageView;
 import com.ringdroid.WaveformView;
-import com.ringdroid.soundfile.SoundFile;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.math.BigInteger;
-import java.net.URL;
-import java.net.URLConnection;
 import java.security.SecureRandom;
-import java.security.acl.LastOwnerException;
-import java.util.Random;
+
+import static com.facebook.react.common.ReactConstants.TAG;
 
 /**
  * Created by juanjimenez on 13/01/2017.
  */
 
-public class OGWaveManager extends SimpleViewManager<WaveformView> implements LifecycleEventListener {
-    private long mLoadingLastUpdateTime;
-    private boolean mLoadingKeepGoing;
-    private long mRecordingLastUpdateTime;
-    private boolean mRecordingKeepGoing;
-    private double mRecordingTime;
-    private boolean mFinishActivity;
-
-    private SoundFile mSoundFile;
-    private File mFile;
-    private String mFilename;
-    private String mArtist;
-    private String mTitle;
-    private int mNewFileKind;
-    private boolean mWasGetContentIntent;
+public class OGWaveManager extends SimpleViewManager<OGWaveView> implements LifecycleEventListener {
 
 
-    private String mInfoContent;
 
-    private boolean mKeyDown;
-    private String mCaption = "";
-    private int mWidth;
-    private int mMaxPos;
-    private int mStartPos;
-    private int mEndPos;
-    private boolean mStartVisible;
-    private boolean mEndVisible;
-    private int mLastDisplayedStartPos;
-    private int mLastDisplayedEndPos;
-    private int mOffset;
-    private int mOffsetGoal;
-    private int mFlingVelocity;
-    private int mPlayStartMsec;
-    private int mPlayEndMsec;
-
-    private boolean mIsPlaying;
-
-    private boolean mTouchDragging;
-    private float mTouchStart;
-    private int mTouchInitialOffset;
-    private int mTouchInitialStartPos;
-    private int mTouchInitialEndPos;
-    private long mWaveformTouchStartMsec;
-    private float mDensity;
-    private int mMarkerLeftInset;
-    private int mMarkerRightInset;
-    private int mMarkerTopOffset;
-    private int mMarkerBottomOffset;
 
     public static final String REACT_CLASS = "OGWave";
     //private WaveformView mWaveView;
@@ -106,7 +53,7 @@ public class OGWaveManager extends SimpleViewManager<WaveformView> implements Li
     }
 
 
-    void deleteFiles(String folder, String ext)
+    /**void deleteFiles(String folder, String ext)
     {
         File dir = new File(folder);
         if (!dir.exists())
@@ -120,33 +67,63 @@ public class OGWaveManager extends SimpleViewManager<WaveformView> implements Li
                 Log.d("TAG", "Deleted:" + result);
             }
         }
-    }
+    }**/
     @Override
-    public WaveformView createViewInstance(ThemedReactContext context) {
+    public OGWaveView createViewInstance(ThemedReactContext context) {
         context.addLifecycleEventListener(this);
 
        // deleteFiles(Environment.getExternalStorageDirectory().toString(),"mp3");
 
        // mWaveView = new WaveformView(context);
 
-        return new WaveformView(context);
+        return new OGWaveView(context);
     }
 
 
    @ReactProp(name = "src")
-    public void setSrc(WaveformView view, @Nullable ReadableMap src) {
+    public void setSrc(OGWaveView view, @Nullable ReadableMap src) {
 
 
-       view.setmURI(src.getString("uri"));
+       view.setURI(src.getString("uri"));
+    }
+
+
+
+    @ReactProp(name = "autoPlay", defaultBoolean = false)
+    public void setAutoPlay(OGWaveView view, boolean autoPlay) {
+        Log.e("XSXSXS","setAutoPlay:::: "+autoPlay);
+        view.setAutoPlay(autoPlay);
     }
 
 
     @ReactProp(name = "waveFormStyle")
-    public void setWaveFormStyle(WaveformView view, @Nullable ReadableMap waveFormStyle) {
-        Log.e("XSXSXS","XSXSXS:::: "+waveFormStyle.getInt("rightWaveColor"));
+    public void setWaveFormStyle(OGWaveView view, @Nullable ReadableMap waveFormStyle) {
+
 
         view.setmWaveColor(waveFormStyle.getInt("rightWaveColor"));
     }
+
+ 
+
+    @ReactMethod
+    public void play(@Nullable Callback onPlayed){
+        Log.e(TAG, "XXXonPlay: " );
+
+        onPlayed.invoke("PLLLLAAYYYEDD");
+
+    }
+
+   /** @ReactProp(name = "pause")
+    public void setPause(OGWaveView view, @Nullable Callback pause){
+       // view.onPlay();
+
+    }
+
+    @ReactProp(name = "stop")
+    public void setStop(OGWaveView view, @Nullable Callback stop){
+        //view.onPlay();
+
+    }**/
 
 
     @Override

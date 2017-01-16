@@ -382,13 +382,13 @@ public class WaveformView extends View {
     public int millisecsToPixels(int msecs) {
         double z = mZoomFactorByZoomLevel[mZoomLevel];
         return (int)((msecs * 1.0 * mSampleRate * z) /
-                     (1000.0 * mSamplesPerFrame) + 0.5);
+                (1000.0 * mSamplesPerFrame) + 0.5);
     }
 
     public int pixelsToMillisecs(int pixels) {
         double z = mZoomFactorByZoomLevel[mZoomLevel];
         return (int)(pixels * (1000.0 * mSamplesPerFrame) /
-                     (mSampleRate * z) + 0.5);
+                (mSampleRate * z) + 0.5);
     }
 
     public void setParameters(int start, int end, int offset) {
@@ -439,7 +439,7 @@ public class WaveformView extends View {
         if (mSoundFile == null)
             return;
 
-       if (mHeightsAtThisZoomLevel == null)
+        if (mHeightsAtThisZoomLevel == null)
             computeIntsForThisZoomLevel();
 
 
@@ -457,137 +457,28 @@ public class WaveformView extends View {
             width = measuredWidth;
 
 
-        Log.e("XSXSXS","width:: "+width);
-        Log.e("XSXSXS","measuredWidth:: "+measuredWidth);
-       // Log.e("XSXSXS","measuredWidth/width:: "+(measuredWidth/width));
-
-
-
-
-        // Draw grid
-       /** double onePixelInSecs = pixelsToSeconds(1);
-        boolean onlyEveryFiveSecs = (onePixelInSecs > 1.0 / 50.0);
-        double fractionalSecs = mOffset * onePixelInSecs;
-        int integerSecs = (int) fractionalSecs;
-        int i = 0;
-        while (i < width) {
-            i++;
-            fractionalSecs += onePixelInSecs;
-            int integerSecsNew = (int) fractionalSecs;
-            if (integerSecsNew != integerSecs) {
-                integerSecs = integerSecsNew;
-                if (!onlyEveryFiveSecs || 0 == (integerSecs % 5)) {
-                    canvas.drawLine(i, 0, i, measuredHeight, mGridPaint);
-                }
-            }
-        }**/
         int i = 0;
         // Draw waveform
-
-        Log.e(TAG, "width: " +width);
-        Log.e(TAG, "measuredWidth: " +measuredWidth);
-
-
 
 
 
         for (i = 0; i < measuredWidth; i++) {
 
             int stretchedwidthPos =  Math.round((i*width)/measuredWidth);
-                    Paint paint;
-           // drawWaveformLine(canvas, i, 0, measuredHeight,mUnselectedBkgndLinePaint);
+            Paint paint;
+
             paint = mUnselectedLinePaint;
-           // Log.e(TAG, "reading i: " +i +" form stretchedwidthPos: "+stretchedwidthPos);
+
             drawWaveformLine(
                     canvas, i,
                     ctr - mHeightsAtThisZoomLevel[start + stretchedwidthPos],
                     ctr + 1 + mHeightsAtThisZoomLevel[start + stretchedwidthPos],
                     paint);
 
-            //canvas.drawLine(i, ctr - mHeightsAtThisZoomLevel[start + i], i, ctr + 1 + mHeightsAtThisZoomLevel[start +i ], paint);
-           // Log.e("XSXGOTX","ctr - mHeightsAtThisZoomLevel[start + i] :: "+ (ctr - mHeightsAtThisZoomLevel[start + i]));
-          //  Log.e("XSXGOTX","ctr + 1 + mHeightsAtThisZoomLevel[start + i]:: "+ (ctr + 1 + mHeightsAtThisZoomLevel[start + i]));
+
         }
 
-        /**for (i = 0; i < width; i++) {
-            Paint paint;
-            if (i + start >= mSelectionStart &&
-                i + start < mSelectionEnd) {
-                paint = mSelectedLinePaint;
-            } else {
-                drawWaveformLine(canvas, i, 0, measuredHeight,
-                                 mUnselectedBkgndLinePaint);
-                paint = mUnselectedLinePaint;
-            }
-            drawWaveformLine(
-                canvas, i,
-                ctr - mHeightsAtThisZoomLevel[start + i],
-                ctr + 1 + mHeightsAtThisZoomLevel[start + i],
-                paint);
 
-            if (i + start == mPlaybackPos) {
-                canvas.drawLine(i, 0, i, measuredHeight, mPlaybackLinePaint);
-            }
-        }**/
-
-        // If we can see the right edge of the waveform, draw the
-        // non-waveform area to the right as unselected
-       // for (i = width; i < measuredWidth; i++) {
-           // drawWaveformLine(canvas, i, 0, measuredHeight,
-                            // mUnselectedBkgndLinePaint);
-       // }
-
-        // Draw borders
-        /**canvas.drawLine(
-            mSelectionStart - mOffset + 0.5f, 30,
-            mSelectionStart - mOffset + 0.5f, measuredHeight,
-            mBorderLinePaint);
-        canvas.drawLine(
-            mSelectionEnd - mOffset + 0.5f, 0,
-            mSelectionEnd - mOffset + 0.5f, measuredHeight - 30,
-            mBorderLinePaint);**/
-
-        // Draw timecode
-       /** double timecodeIntervalSecs = 1.0;
-        if (timecodeIntervalSecs / onePixelInSecs < 50) {
-            timecodeIntervalSecs = 5.0;
-        }
-        if (timecodeIntervalSecs / onePixelInSecs < 50) {
-            timecodeIntervalSecs = 15.0;
-        }
-
-        // Draw grid
-        fractionalSecs = mOffset * onePixelInSecs;
-        int integerTimecode = (int) (fractionalSecs / timecodeIntervalSecs);
-        i = 0;
-        while (i < width) {
-            i++;
-            fractionalSecs += onePixelInSecs;
-            integerSecs = (int) fractionalSecs;
-            int integerTimecodeNew = (int) (fractionalSecs /
-                                            timecodeIntervalSecs);
-            if (integerTimecodeNew != integerTimecode) {
-                integerTimecode = integerTimecodeNew;
-
-                // Turn, e.g. 67 seconds into "1:07"
-                String timecodeMinutes = "" + (integerSecs / 60);
-                String timecodeSeconds = "" + (integerSecs % 60);
-                if ((integerSecs % 60) < 10) {
-                    timecodeSeconds = "0" + timecodeSeconds;
-                }
-                String timecodeStr = timecodeMinutes + ":" + timecodeSeconds;
-                float offset = (float) (
-                    0.5 * mTimecodePaint.measureText(timecodeStr));
-                canvas.drawText(timecodeStr,
-                                i - offset,
-                                (int)(12 * mDensity),
-                                mTimecodePaint);
-            }
-        }
-
-        if (mListener != null) {
-            mListener.waveformDraw();
-        }**/
     }
 
     /**
@@ -607,17 +498,17 @@ public class WaveformView extends View {
             smoothedGains[1] = frameGains[1];
         } else if (numFrames > 2) {
             smoothedGains[0] = (double)(
-                (frameGains[0] / 2.0) +
-                (frameGains[1] / 2.0));
+                    (frameGains[0] / 2.0) +
+                            (frameGains[1] / 2.0));
             for (int i = 1; i < numFrames - 1; i++) {
                 smoothedGains[i] = (double)(
-                    (frameGains[i - 1] / 3.0) +
-                    (frameGains[i    ] / 3.0) +
-                    (frameGains[i + 1] / 3.0));
+                        (frameGains[i - 1] / 3.0) +
+                                (frameGains[i    ] / 3.0) +
+                                (frameGains[i + 1] / 3.0));
             }
             smoothedGains[numFrames - 1] = (double)(
-                (frameGains[numFrames - 2] / 2.0) +
-                (frameGains[numFrames - 1] / 2.0));
+                    (frameGains[numFrames - 2] / 2.0) +
+                            (frameGains[numFrames - 1] / 2.0));
         }
 
         // Make sure the range is no more than 0 - 255
@@ -708,8 +599,8 @@ public class WaveformView extends View {
             mZoomFactorByZoomLevel[j] = mZoomFactorByZoomLevel[j - 1] / 2.0;
             for (int i = 0; i < mLenByZoomLevel[j]; i++) {
                 mValuesByZoomLevel[j][i] =
-                    0.5 * (mValuesByZoomLevel[j - 1][2 * i] +
-                           mValuesByZoomLevel[j - 1][2 * i + 1]);
+                        0.5 * (mValuesByZoomLevel[j - 1][2 * i] +
+                                mValuesByZoomLevel[j - 1][2 * i + 1]);
             }
         }
 
@@ -735,7 +626,7 @@ public class WaveformView extends View {
         mHeightsAtThisZoomLevel = new int[mLenByZoomLevel[mZoomLevel]];
         for (int i = 0; i < mLenByZoomLevel[mZoomLevel]; i++) {
             mHeightsAtThisZoomLevel[i] =
-                (int)(mValuesByZoomLevel[mZoomLevel][i] * halfHeight);
+                    (int)(mValuesByZoomLevel[mZoomLevel][i] * halfHeight);
         }
     }
 }

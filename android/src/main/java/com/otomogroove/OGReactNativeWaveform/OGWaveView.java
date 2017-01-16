@@ -6,116 +6,140 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
-import android.media.audiofx.Visualizer;
-import android.net.Uri;
-import android.util.DisplayMetrics;
+import android.os.AsyncTask;
+import android.os.Handler;
 import android.util.Log;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import com.ringdroid.WaveformView;
-import com.ringdroid.soundfile.SoundFile;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URI;
+
+import static com.facebook.react.common.ReactConstants.TAG;
 
 /**
  * Created by juanjimenez on 13/01/2017.
  */
 
-public class OGWaveView extends View {
+public class OGWaveView extends FrameLayout {
 
 
+    private final OGUIWaveView mUIWave;
     private MediaPlayer mMediaPlayer;
-    private Visualizer mVisualizer;
+    private WaveformView mWaveView;
+
+
 
     private Context mContext;
+    private int mWaveColor;
+    private boolean mAutoplay = false;
+
     public OGWaveView(Context context) {
         super(context);
         mContext = context;
 
+        mWaveView = new WaveformView(mContext);
+        mUIWave = new OGUIWaveView(mContext);
+
+        mUIWave.setBackgroundColor(Color.TRANSPARENT);
 
 
+    }
+    public void setmWaveColor(int mWaveColor) {
+
+        this.mWaveView.setmWaveColor(mWaveColor);
 
 
     }
 
+    public void onPlay(){
+        this.mMediaPlayer.start();
+    }
+
+    public void setAutoPlay(boolean autoplay){
+        Log.e(TAG, "setAutoPlay: " + autoplay );
+        this.mAutoplay = autoplay;
+        if(mAutoplay) {
+            mMediaPlayer.start();
+            Log.e(TAG, "setURI:starting ");
+        }
+        if(mAutoplay)
+            progressReportinghandler.postDelayed(progressRunnable, 500);
+
+    }
 
     public void setURI(String uri){
         // Create the MediaPlayer
+        Log.e(TAG, "setURI: autoplay is"+mAutoplay);
+        this.mWaveView.setmURI(uri);
 
         mMediaPlayer= new MediaPlayer();
         try {
             mMediaPlayer.setDataSource(uri);
             mMediaPlayer.prepare();
-            //mMediaPlayer.start();
+
+
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
 
 
-        init();
+        addView(this.mWaveView);
+        addView(this.mUIWave);
 
 
-        // Create the Visualizer object and attach it to our media player.
-        mVisualizer = new Visualizer(mMediaPlayer.getAudioSessionId());
-      //  mVisualizer.setCaptureSize(Visualizer.getCaptureSizeRange()[1]);
-       /** mVisualizer.setDataCaptureListener(new Visualizer.OnDataCaptureListener() {
-            public void onWaveFormDataCapture(Visualizer visualizer, byte[] bytes,
-                                              int samplingRate) {
-                //mBytes = bytes;
-               // invalidate();
+    }
+
+
+
+
+    private Handler progressReportinghandler = new Handler();
+    private Runnable progressRunnable = new Runnable() {
+
+        public void run() {
+            try {
+                if (mMediaPlayer.isPlaying()) {
+                    new UpdateProgressRequest().execute();
+
+                    // seconds
+                    progressReportinghandler.postDelayed(progressRunnable, 100);
+                }
+            } catch (IllegalStateException ex) {
+                ex.getStackTrace();
             }
+        };
+    };
 
-            public void onFftDataCapture(Visualizer visualizer, byte[] bytes, int samplingRate) {}
-        }, Visualizer.getMaxCaptureRate() / 2, true, false);**/
+    protected class UpdateProgressRequest extends AsyncTask<Void, Void, Float> {
 
-    }
+        @Override
+        protected Float doInBackground(Void... params) {
 
-    private byte[] mBytes;
-    private float[] mPoints;
-    private Rect mRect = new Rect();
+            if (mMediaPlayer.isPlaying()) {
+                String offset = Integer.valueOf(
+                        mMediaPlayer.getCurrentPosition()).toString();
 
-    private Paint mForePaint = new Paint();
+                Log.e(TAG, "doInBackground: "+ mMediaPlayer.getCurrentPosition() + " of toal: "+mMediaPlayer.getDuration() );
 
+                Float currrentPos = (float) mMediaPlayer.getCurrentPosition()/mMediaPlayer.getDuration();
 
-
-    private void init() {
-        mBytes = null;
-
-        mForePaint.setStrokeWidth(1f);
-        mForePaint.setAntiAlias(true);
-        mForePaint.setColor(Color.rgb(0, 128, 255));
-    }
-
-
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        if (mBytes == null) {
-            return;
+                return currrentPos;
+            }
+            return null;
         }
 
-        if (mPoints == null || mPoints.length < mBytes.length * 4) {
-            mPoints = new float[mBytes.length * 4];
+        @Override
+        protected void onPostExecute(Float aFloat) {
+            super.onPostExecute(aFloat);
+
+            Log.e(TAG, "onPostExecute: " + aFloat );
+
+            mUIWave.updatePlayHead(aFloat);
         }
-
-        mRect.set(0, 0, getWidth(), getHeight());
-
-        for (int i = 0; i < mBytes.length - 1; i++) {
-            mPoints[i * 4] = mRect.width() * i / (mBytes.length - 1);
-            mPoints[i * 4 + 1] = mRect.height() / 2
-                    + ((byte) (mBytes[i] + 128)) * (mRect.height() / 2) / 128;
-            mPoints[i * 4 + 2] = mRect.width() * (i + 1) / (mBytes.length - 1);
-            mPoints[i * 4 + 3] = mRect.height() / 2
-                    + ((byte) (mBytes[i + 1] + 128)) * (mRect.height() / 2) / 128;
-        }
-
-        canvas.drawLines(mPoints, mForePaint);
     }
+
+
 
 }
