@@ -62,20 +62,14 @@ import WaveForm from 'react-native-audiowaveform';
 ```javascript
 import WaveForm from 'react-native-audiowaveform';
 
-<WaveForm 
-    source={ {uri: 'https://url/path/to/the/file.mp3'}}  
-    
->
-</WaveForm>
-
+<WaveForm source={ {uri: 'https://url/path/to/the/file.mp3'}}  />
 
 ```
 
 Now added audio playback, just for Android, iOS WIP. Just call autoPlay property:
 ```javascript
-<WaveForm style={styles.waveform}
-                         autoPlay={true}
-                         source={require('./audio/intro.mp3')}
-                          />
+<WaveForm autoPlay={true}
+         source={require('./audio/intro.mp3')}
+/>
 
 ```
