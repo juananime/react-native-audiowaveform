@@ -15,7 +15,7 @@ import java.util.List;
  * Created by juanjimenez on 13/01/2017.
  */
 
-public class OGWavePakage implements ReactPackage {
+public class OGWavePackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
