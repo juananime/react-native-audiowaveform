@@ -2,8 +2,8 @@
 # react-native-audiowaveform
 React Native component for visuaization of audio files waveform.
 Very early stage, will add more conisfiguration options and styles eventually.
-Regarding Android is ready with basic funtionalities, performance needs to get improved. 
-It's bveing implemented an adaptation of the RingAndroid audio libraries, but those need much performance improvement, working on it...
+Regarding Android is ready with rendrization of the waveform and audio playback. 
+It's been implemented an adaptation of the ringdroid audio libraries, but those need much performance improvement, working on it...
 
 
 
@@ -54,8 +54,6 @@ import WaveForm from 'react-native-audiowaveform';
     waveFormStyle={{leftWaveColor:'red', rightWaveColor:'#ffffff'}}
 >
 </WaveForm>
-
-
 ```
   Also it is possible to get remote audio files:
  
