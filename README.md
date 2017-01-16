@@ -36,7 +36,7 @@ Android is ready with basic funtionalities, performance needs to get improved.
   	```
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
   	```
-      compile project(':react-native-react-native-audiowaveform')
+      compile project(':react-native-audiowaveform')
   	```
 
 ## Usage
