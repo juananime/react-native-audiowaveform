@@ -1,8 +1,8 @@
 
 # react-native-audiowaveform
 React Native component for visuaization of audio files waveform.
-Very early stage, will add more configuration options and styles eventually.
-Android is on progress, so right now working just for iOS.
+Very early stage, will add more conisfiguration options and styles eventually.
+Android is ready with basic funtionalities, performance needs to get improved.
 
 
 <img src="/screenshots/screen4.png" alt="sounWaves" style="width: 60px;"/>
@@ -27,12 +27,12 @@ Android is on progress, so right now working just for iOS.
 #### Android
 
 1. Open up `android/app/src/main/java/[...]/MainActivity.java`
-  - Add `import com.reactlibrary.OGReactNativeAudiowaveformPackage;` to the imports at the top of the file
-  - Add `new OGReactNativeAudiowaveformPackage()` to the list returned by the `getPackages()` method
+  - Add `import com.otomogroove.OGReactNativeWaveform.OGWavePackage;` to the imports at the top of the file
+  - Add `new OGWavePackage()` to the list returned by the `getPackages()` method
 2. Append the following lines to `android/settings.gradle`:
   	```
-  	include ':react-native-react-native-audiowaveform'
-  	project(':react-native-react-native-audiowaveform').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-react-native-audiowaveform/android')
+  	include ':react-native-audiowaveform'
+  	project(':react-native-audiowaveform').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-audiowaveform/android')
   	```
 3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
   	```
