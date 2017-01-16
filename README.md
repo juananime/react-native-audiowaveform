@@ -62,7 +62,7 @@ import WaveForm from 'react-native-audiowaveform';
 ```javascript
 import WaveForm from 'react-native-audiowaveform';
 
-<WaveForm source={ {uri: 'https://url/path/to/the/file.mp3'}}  />
+<WaveForm source={{uri:'https://url/path/to/the/file.mp3'}}  />
 
 ```
 
