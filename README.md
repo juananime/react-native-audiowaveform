@@ -7,7 +7,8 @@ It's bveing implemented an adaptation of the RingAndroid audio libraries, but th
 
 
 
-<img src="/screenshots/screen4.png" alt="sounWaves" style="width: 60px;"/>
+<img src="/screenshots/screen6.png" alt="ios" style="width: 60px;"/>
+<img src="/screenshots/screen6.png" alt="android" style="width: 60px;"/>
 ## Getting started
 
 `$ npm react-native-audiowaveform --save`
