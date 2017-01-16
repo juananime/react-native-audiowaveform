@@ -25,8 +25,19 @@ Android is on progress, so right now working just for iOS.
 4. Run your project (`Cmd+R`)<
 
 #### Android
-`$ Currently no available, working on it...`
 
+1. Open up `android/app/src/main/java/[...]/MainActivity.java`
+  - Add `import com.reactlibrary.OGReactNativeAudiowaveformPackage;` to the imports at the top of the file
+  - Add `new OGReactNativeAudiowaveformPackage()` to the list returned by the `getPackages()` method
+2. Append the following lines to `android/settings.gradle`:
+  	```
+  	include ':react-native-react-native-audiowaveform'
+  	project(':react-native-react-native-audiowaveform').projectDir = new File(rootProject.projectDir, 	'../node_modules/react-native-react-native-audiowaveform/android')
+  	```
+3. Insert the following lines inside the dependencies block in `android/app/build.gradle`:
+  	```
+      compile project(':react-native-react-native-audiowaveform')
+  	```
 
 ## Usage
 ```javascript
