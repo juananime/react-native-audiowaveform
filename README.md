@@ -40,6 +40,9 @@ Android is ready with basic funtionalities, performance needs to get improved.
   	```
 
 ## Usage
+
+So far, reac-native-audiowaveform just generates a image view wite the audio waveform data.
+In order to show graphically a local audio file, use:
 ```javascript
 import WaveForm from 'react-native-audiowaveform';
 
@@ -51,4 +54,16 @@ import WaveForm from 'react-native-audiowaveform';
 
 
 ```
-  
+  Also it is possible to get remote audio files:
+ 
+```javascript
+import WaveForm from 'react-native-audiowaveform';
+
+<WaveForm 
+    source={ {uri: 'https://url/path/to/the/file.mp3'}}  
+    
+>
+</WaveForm>
+
+
+```
