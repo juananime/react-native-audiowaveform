@@ -8,7 +8,7 @@ It's bveing implemented an adaptation of the RingAndroid audio libraries, but th
 
 
 <img src="/screenshots/screen6.png" alt="ios" style="width: 60px;"/>
-<img src="/screenshots/screen3.png" alt="android" style="width: 60px;"/>
+<img src="/screenshots/screen31.png" alt="android" style="width: 60px;"/>
 ## Getting started
 
 `$ npm react-native-audiowaveform --save`
@@ -68,5 +68,14 @@ import WaveForm from 'react-native-audiowaveform';
 >
 </WaveForm>
 
+
+```
+
+Now added audio playback, just for Android, iOS WIP. Just call autoPlay property:
+```javascript
+<WaveForm style={styles.waveform}
+                         autoPlay={true}
+                         source={require('./audio/intro.mp3')}
+                          />
 
 ```
