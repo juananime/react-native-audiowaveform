@@ -2,7 +2,9 @@
 # react-native-audiowaveform
 React Native component for visuaization of audio files waveform.
 Very early stage, will add more conisfiguration options and styles eventually.
-Android is ready with basic funtionalities, performance needs to get improved.
+Regarding Android is ready with basic funtionalities, performance needs to get improved. 
+It's bveing implemented an adaptation of the RingAndroid audio libraries, but those need much performance improvement, working on it...
+
 
 
 <img src="/screenshots/screen4.png" alt="sounWaves" style="width: 60px;"/>
@@ -41,7 +43,7 @@ Android is ready with basic funtionalities, performance needs to get improved.
 
 ## Usage
 
-So far, reac-native-audiowaveform just generates a image view wite the audio waveform data.
+So far, reac-native-audiowaveform just generates a image view with the audio waveform data.
 In order to show graphically a local audio file, use:
 ```javascript
 import WaveForm from 'react-native-audiowaveform';
