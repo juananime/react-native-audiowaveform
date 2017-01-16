@@ -7,83 +7,27 @@ import android.util.Log;
 
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.facebook.react.views.image.ReactImageView;
-import com.ringdroid.WaveformView;
 import com.ringdroid.soundfile.SoundFile;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
-import java.security.SecureRandom;
-import java.security.acl.LastOwnerException;
-import java.util.Random;
 
 /**
  * Created by juanjimenez on 13/01/2017.
  */
 
-public class OGWaveManager extends SimpleViewManager<WaveformView> implements LifecycleEventListener {
-    private long mLoadingLastUpdateTime;
-    private boolean mLoadingKeepGoing;
-    private long mRecordingLastUpdateTime;
-    private boolean mRecordingKeepGoing;
-    private double mRecordingTime;
-    private boolean mFinishActivity;
-
-    private SoundFile mSoundFile;
-    private File mFile;
-    private String mFilename;
-    private String mArtist;
-    private String mTitle;
-    private int mNewFileKind;
-    private boolean mWasGetContentIntent;
-
-
-    private String mInfoContent;
-
-    private boolean mKeyDown;
-    private String mCaption = "";
-    private int mWidth;
-    private int mMaxPos;
-    private int mStartPos;
-    private int mEndPos;
-    private boolean mStartVisible;
-    private boolean mEndVisible;
-    private int mLastDisplayedStartPos;
-    private int mLastDisplayedEndPos;
-    private int mOffset;
-    private int mOffsetGoal;
-    private int mFlingVelocity;
-    private int mPlayStartMsec;
-    private int mPlayEndMsec;
-
-    private boolean mIsPlaying;
-
-    private boolean mTouchDragging;
-    private float mTouchStart;
-    private int mTouchInitialOffset;
-    private int mTouchInitialStartPos;
-    private int mTouchInitialEndPos;
-    private long mWaveformTouchStartMsec;
-    private float mDensity;
-    private int mMarkerLeftInset;
-    private int mMarkerRightInset;
-    private int mMarkerTopOffset;
-    private int mMarkerBottomOffset;
-
+public class OGWaveManager extends ViewGroupManager<OGWaveView> implements LifecycleEventListener {
     public static final String REACT_CLASS = "OGWave";
-    //private WaveformView mWaveView;
+    private OGWaveView mWaveView;
 
     @Override
     public String getName() {
@@ -91,58 +35,25 @@ public class OGWaveManager extends SimpleViewManager<WaveformView> implements Li
         return REACT_CLASS;
     }
 
-
-    public class GenericExtFilter implements FilenameFilter {
-
-        private String ext;
-
-        public GenericExtFilter(String ext) {
-            this.ext = ext;
-        }
-
-        public boolean accept(File dir, String name) {
-            return (name.endsWith(ext));
-        }
-    }
-
-
-    void deleteFiles(String folder, String ext)
-    {
-        File dir = new File(folder);
-        if (!dir.exists())
-            return;
-        File[] files = dir.listFiles(new GenericExtFilter(ext));
-        for (File file : files)
-        {
-            if (!file.isDirectory())
-            {
-                boolean result = file.delete();
-                Log.d("TAG", "Deleted:" + result);
-            }
-        }
-    }
     @Override
-    public WaveformView createViewInstance(ThemedReactContext context) {
+    public OGWaveView createViewInstance(ThemedReactContext context) {
         context.addLifecycleEventListener(this);
+        mWaveView = new OGWaveView(context);
 
-        deleteFiles(Environment.getExternalStorageDirectory().toString(),"mp3");
-
-       // mWaveView = new WaveformView(context);
-
-        return new WaveformView(context);
+        return mWaveView;
     }
 
 
    @ReactProp(name = "src")
-    public void setSrc(WaveformView view, @Nullable ReadableMap src) {
+    public void setSrc(OGWaveView view, @Nullable ReadableMap src) {
         Log.e("XSXSXS",":XSXGOT THE FUCKING SRC    SXS::: "+src.getString("uri"));
 
-       view.setmURI(src.getString("uri"));
+        new DownloadFileFromURL().execute(src.getString("uri"));
     }
 
 
     @ReactProp(name = "waveFormStyle")
-    public void setWaveFormStyle(WaveformView view, @Nullable ReadableMap waveFormStyle) {
+    public void setWaveFormStyle(OGWaveView view, @Nullable ReadableMap waveFormStyle) {
         Log.e("XSXSXS","XSXSXS:::: "+waveFormStyle.getInt("rightWaveColor"));
     }
 
@@ -161,48 +72,110 @@ public class OGWaveManager extends SimpleViewManager<WaveformView> implements Li
     public void onHostDestroy() {
 
     }
-
-    /**private void finishOpeningSoundFile(SoundFile soundFile) {
-        mWaveView.setSoundFile(soundFile);
-        mWaveView.recomputeHeights(mDensity);
-
-        mMaxPos = mWaveView.maxPos();
-        mLastDisplayedStartPos = -1;
-        mLastDisplayedEndPos = -1;
-
-        mTouchDragging = false;
-
-        mOffset = 0;
-        mOffsetGoal = 0;
-        mFlingVelocity = 0;
-
-        if (mEndPos > mMaxPos)
-            mEndPos = mMaxPos;
+    /**
+     * Background Async Task to download file
+     * */
+    class DownloadFileFromURL extends AsyncTask<String, String, String> {
 
 
+        String filePath = Environment.getExternalStorageDirectory().toString() + "/temp.mp3";
+
+        /**
+         * Before starting background thread Show Progress Bar Dialog
+         * */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        /**
+         * Downloading file in background thread
+         * */
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+            try {
+                URL url = new URL(f_url[0]);
+                URLConnection conection = url.openConnection();
+                conection.connect();
+
+                // this will be useful so that you can show a tipical 0-100%
+                // progress bar
+                int lenghtOfFile = conection.getContentLength();
+
+                // download the file
+                InputStream input = new BufferedInputStream(url.openStream(),
+                        8192);
 
 
-        updateDisplay();
-    }**/
-
-    /**private synchronized void updateDisplay() {
-
-        Log.e("Aaaa","AAAAAAAAAAAAAAAA");
 
 
-        mWaveView.invalidate();
+                // Output stream
+                OutputStream output = new FileOutputStream(filePath);
+
+                byte data[] = new byte[1024];
+
+                long total = 0;
+
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    // publishing the progress....
+                    // After this onProgressUpdate will be called
+                    publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+
+                    // writing data to file
+                    output.write(data, 0, count);
+                }
+
+                // flushing output
+                output.flush();
+
+                // closing streams
+                output.close();
+                input.close();
+                Log.e("XSXGOT","Audio file complented + "+filePath);
 
 
 
+            } catch (Exception e) {
+                Log.e("XSXGOT Error: ", e.getMessage());
+            }
 
+            return null;
+        }
 
-        Log.e("XSXGOT","VFVFVFVFVFVFVFVFVFVFVFVFV");
+        /**
+         * Updating progress bar
+         * */
+        protected void onProgressUpdate(String... progress) {
+            // setting progress percentage
 
-    }**/
+        }
 
-    private   String random() {
-        return new BigInteger(130, new SecureRandom()).toString(32);
+        /**
+         * After completing background task Dismiss the progress dialog
+         * **/
+        @Override
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog after the file was downloaded
+            SoundFile soundFile = null;
+            try {
+                soundFile = SoundFile.create(filePath,null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (SoundFile.InvalidInputException e) {
+                e.printStackTrace();
+            }
+
+            if(soundFile != null) {
+                mWaveView.setAudioFile(soundFile);
+            }else{
+                Log.e("XSXGOT","SoundFile is null");
+            }
+
+        }
+
     }
-
 }
 

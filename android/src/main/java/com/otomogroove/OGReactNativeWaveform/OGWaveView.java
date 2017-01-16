@@ -71,7 +71,6 @@ public class OGWaveView extends FrameLayout {
     public OGWaveView(Context context) {
         super(context);
         mContext = context;
-        this.setWillNotDraw(false);
 
 
     }
@@ -81,10 +80,7 @@ public class OGWaveView extends FrameLayout {
 
         mWaveformView = new WaveformView(mContext);
 
-
         finishOpeningSoundFile();
-
-
 
 
     }
@@ -156,15 +152,16 @@ public class OGWaveView extends FrameLayout {
             }
         }
 
-        mWaveformView.setParameters(0, mEndPos, 0);
+        mWaveformView.setParameters(mStartPos, mEndPos, mOffset);
 
         addView(mWaveformView);
+        mWaveformView.invalidate();
 
 
 
 
 
-        Log.e("XSXGOT","VFVFVFVFVFVFVFVFVFVFVFVFV");
+
 
     }
 
