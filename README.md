@@ -67,10 +67,21 @@ import WaveForm from 'react-native-audiowaveform';
 
 ```
 
-Now added audio playback, for both iOS and Android. Just call autoPlay property:
+Autoplayback flag, for both iOS and Android. Just call autoPlay property:
 ```javascript
 <WaveForm autoPlay={true}
          source={require('./audio/intro.mp3')}
 />
 
 ```
+
+
+In order to detect touch, just IOS, call method onPress, also, switch play true/false will play/pause audio:
+```javascript
+<WaveForm style={this.props.style}
+                      onPress = {(sender) => this.myMethodOnPress() }
+                      source={{uri:'https://url/path/to/the/file.mp3'}}
+                      play={true}
+                      />
+
+```       
