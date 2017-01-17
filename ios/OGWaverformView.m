@@ -56,13 +56,25 @@
         [self playAudio];
 }
 
+
 -(void)setAutoPlay:(BOOL)autoPlay{
+    NSLog(@"PPPLLLAAAAYYY");
     _autoPlay=autoPlay;
+    
+    
 }
 
+-(void)setPlay:(BOOL)play{
+    if(play){
+        [self playAudio];
+    }
+}
 
-
-
+-(void)pauseAudio{
+    [_player pause];
+    [_playbackTimer invalidate];
+    _playbackTimer = nil;
+}
 -(void)playAudio{
     
     NSLog(@"PLAYING ::: %@",_soundPath);
@@ -362,6 +374,18 @@
     }
     return self;
 }
+
+
+
+
+#pragma mark OGWaveDelegateProtocol
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    
+    [_delegate OGWaveOnTouch:self];
+}
+
+
+
 
 /*
 // Only override drawRect: if you perform custom drawing.

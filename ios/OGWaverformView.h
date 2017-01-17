@@ -10,6 +10,7 @@
 #import <React/RCTResizeMode.h>
 #import <AVFoundation/AVFoundation.h>
 #import "UIView+React.h"
+#import "OGWaveDelegateProtocol.h"
 @class RCTBridge;
 
 @interface OGWaverformView : UIView
@@ -17,6 +18,7 @@
 
 @property(nonatomic) NSDictionary * src;
 @property(nonatomic) BOOL autoPlay;
+@property(nonatomic) BOOL play;
 @property(nonatomic) NSDictionary * waveFormStyle;
 @property(nonatomic) UIColor * leftWaveColor;
 @property(nonatomic) UIColor * rightWaveColor;
@@ -26,12 +28,14 @@
 @property(nonatomic) NSString *soundPath;
 @property(nonatomic) AVAudioPlayer *player ;
 @property(nonatomic) NSTimer * playbackTimer;
-
+@property(nonatomic) id<OGWaveDelegateProtocol> delegate;
+@property (nonatomic, copy) RCTBubblingEventBlock onPress;
 
 @property (nonatomic, strong) AVAudioPlayer *_audioPlayer;
 
 - (instancetype)initWithBridge:(RCTBridge *)bridge NS_DESIGNATED_INITIALIZER;
 - (NSData *) renderPNGAudioPictogramLogForAssett:(AVURLAsset *)songAsset;
 - (void)updateProgress:(NSTimer*)timer;
+
 
 @end
