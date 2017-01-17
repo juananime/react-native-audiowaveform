@@ -9,7 +9,7 @@ Regarding Android is ready with waveform's rederization and audio playback. Thus
 
 
 
-<img src="/screenshots/screen6.png" alt="ios" style="width: 60px;"/>
+<img src="/screenshots/screen32.png" alt="ios" style="width: 60px;"/>
 <img src="/screenshots/screen31.png" alt="android" style="width: 60px;"/>
 
 ## Getting started
