@@ -34,16 +34,23 @@
     //Setup UI Views
     
     //Waveform image
+    if(_waveformImage){
+        [_waveformImage removeFromSuperview];
+        _waveformImage = nil;
+    }
     _waveformImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
     [_waveformImage setImage:[UIImage imageWithData:[self renderPNGAudioPictogramLogForAssett:_asset]]];
     
     //Scrubb player
     [self addSubview:_waveformImage];
-    if(!_scrubView){
-        self.scrubView = [self getPlayerScrub];
-        [self addSubview:self.scrubView];
+    if(_scrubView){
+        
+        
+        [_scrubView removeFromSuperview];
+        _scrubView = nil;
     }
-    
+    _scrubView = [self getPlayerScrub];
+    [self addSubview:_scrubView];
     
     if(_autoPlay)
         [self playAudio];
