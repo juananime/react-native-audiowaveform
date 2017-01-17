@@ -65,7 +65,7 @@ import WaveForm from 'react-native-audiowaveform';
 
 ```
 
-Now added audio playback, just for Android, iOS WIP. Just call autoPlay property:
+Now added audio playback, for both iOS and Android. Just call autoPlay property:
 ```javascript
 <WaveForm autoPlay={true}
          source={require('./audio/intro.mp3')}
