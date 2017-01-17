@@ -8,11 +8,14 @@
 
 #import "OGWaveManager.h"
 #import "OGWaverformView.h"
+#import "UIView+React.h"
 
 @implementation OGWaveManager
 
 RCT_EXPORT_VIEW_PROPERTY(waveFormStyle, NSDictionary);
 RCT_EXPORT_VIEW_PROPERTY(src, NSDictionary);
+RCT_EXPORT_VIEW_PROPERTY(autoPlay, BOOL);
+
 
 
 

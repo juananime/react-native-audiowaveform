@@ -10,6 +10,7 @@
 		474CE2261E24FB69004A0B7A /* OGWaverformView.m in Sources */ = {isa = PBXBuildFile; fileRef = 474CE2241E24FB69004A0B7A /* OGWaverformView.m */; };
 		474CE2301E250AE1004A0B7A /* OGWaveManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 474CE22F1E250AE1004A0B7A /* OGWaveManager.m */; };
 		476E6BB81E25627C007841CD /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 476E6BB71E25627C007841CD /* AVFoundation.framework */; };
+		478380411E2DF702003E6BFE /* OGWaveUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 478380401E2DF702003E6BFE /* OGWaveUtils.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +32,8 @@
 		474CE22E1E250AE1004A0B7A /* OGWaveManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OGWaveManager.h; sourceTree = "<group>"; };
 		474CE22F1E250AE1004A0B7A /* OGWaveManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OGWaveManager.m; sourceTree = "<group>"; };
 		476E6BB71E25627C007841CD /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		4783803F1E2DF702003E6BFE /* OGWaveUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OGWaveUtils.h; sourceTree = "<group>"; };
+		478380401E2DF702003E6BFE /* OGWaveUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OGWaveUtils.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +67,8 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				4783803F1E2DF702003E6BFE /* OGWaveUtils.h */,
+				478380401E2DF702003E6BFE /* OGWaveUtils.m */,
 				474CE22E1E250AE1004A0B7A /* OGWaveManager.h */,
 				474CE22F1E250AE1004A0B7A /* OGWaveManager.m */,
 				474CE2231E24FB69004A0B7A /* OGWaverformView.h */,
@@ -130,6 +135,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				474CE2261E24FB69004A0B7A /* OGWaverformView.m in Sources */,
+				478380411E2DF702003E6BFE /* OGWaveUtils.m in Sources */,
 				474CE2301E250AE1004A0B7A /* OGWaveManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

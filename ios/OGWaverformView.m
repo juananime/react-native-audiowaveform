@@ -7,7 +7,9 @@
 //
 
 #import "OGWaverformView.h"
+#import "OGWaveUtils.h"
 
+//Using the solution exposed at http://stackoverflow.com/questions/8298610/waveform-on-io
 
 @implementation OGWaverformView {
     __weak RCTBridge *_bridge;
@@ -16,7 +18,7 @@
 
 #define absX(x) (x<0?0-x:x)
 #define minMaxX(x,mn,mx) (x<=mn?mn:(x>=mx?mx:x))
-#define noiseFloor (-50.0)
+#define noiseFloor (-20.0)
 #define decibel(amplitude) (20.0 * log10(absX(amplitude)/32767.0))
 #define imgExt @"png"
 #define imageToData(x) UIImagePNGRepresentation(x)
@@ -25,10 +27,77 @@
     _leftWaveColor = [RCTConvert UIColor:[waveFormStyle objectForKey:@"leftWaveColor"]];
     _rightWaveColor = [RCTConvert UIColor:[waveFormStyle objectForKey:@"rightWaveColor"]];
     
+
     
- NSLog(@"AAAAAAAAAA");
+}
+
+-(void)reactSetFrame:(CGRect)frame{
+    self.frame=frame;
+
+    //Setup UI Views
     
+    _waveformImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+    [_waveformImage setImage:[UIImage imageWithData:[self renderPNGAudioPictogramLogForAssett:_asset]]];
+    [self addSubview:_waveformImage];
+    self.scrubView = [self getPlayerScrub];
+    [self addSubview:self.scrubView];
+    if(_autoPlay)
+        [self playAudio];
+}
+
+-(void)setAutoPlay:(BOOL)autoPlay{
+    _autoPlay=autoPlay;
+}
+
+
+
+
+-(void)playAudio{
     
+    NSLog(@"PLAYING ::: %@",_soundPath);
+    
+    NSURL *soundURL = [NSURL fileURLWithPath:_soundPath];
+    
+    NSError *error = nil;
+    _player = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:&error];
+    
+    if (error) {
+        NSLog(@"ERROR ::: %@",[error localizedDescription]);
+    }
+    
+    [_player play];
+    _playbackTimer=[NSTimer scheduledTimerWithTimeInterval:0.5
+                                                   target:self
+                                                 selector:@selector(updateProgress:)
+                                                 userInfo:nil
+                                                  repeats:YES];
+    
+
+}
+
+-(void)updateProgress:(NSTimer *)timer{
+    float total=_player.duration;
+    float f=_player.currentTime / total;
+    
+    NSString *str = [NSString stringWithFormat:@"%f", f];
+    
+   // playbackProgress.progress=f;
+    
+    float currentXPosScrub = f*self.frame.size.width;
+    
+    [UIView animateWithDuration:1.0
+                     animations:^{
+                         CGRect frame = _scrubView.frame;
+                         frame.origin.x = currentXPosScrub;
+                         _scrubView.frame = frame;
+                     }
+                     completion:^(BOOL finished){
+                         // whatever you need to do when animations are complete
+                     }];
+    
+   // [_scrubView setFrame:CGRectMake(currentXPosScrub, 0, _scrubView.frame.size.width, _scrubView.frame.size.height)];
+    
+    NSLog(@"progress :: %@",str);
 }
 
 -(void)setSrc:(NSDictionary *)src{
@@ -38,29 +107,32 @@
     
     NSString *uri =  [src objectForKey:@"uri"];
     
+    //Since any file sent from JS side in Reeact Native is through HTTP, and
+    //AVURLAsset just works wiht local files, then, downloading and processing.
     
     NSURL  *remoteUrl = [NSURL URLWithString:uri];
     NSData *urlData = [NSData dataWithContentsOfURL:remoteUrl];
     if ( urlData )
     {
-       
-        
-        
-        NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"temp.mp3"];
-        [urlData writeToFile:filePath atomically:YES];
-        
-        NSURL * localUrl = [NSURL fileURLWithPath: filePath];
-        
+        NSString *fileName = [NSString stringWithFormat:@"%@.mp3",[OGWaveUtils randomStringWithLength:5]];
+        _soundPath = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
+        [urlData writeToFile:_soundPath atomically:YES];
+        NSURL * localUrl = [NSURL fileURLWithPath: _soundPath];
         _asset = [AVURLAsset assetWithURL: localUrl];
-        
-[self setImage:[UIImage imageWithData:[self renderPNGAudioPictogramLogForAssett:_asset]]];
-        
-        
-        NSLog(@"DEDEDEDEDEDEED");
+
     }
     
 
 
+}
+
+-(UIView *)getPlayerScrub{
+    
+    UIView *viewAux = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2,self.frame.size.height )];
+    [viewAux setBackgroundColor:[UIColor redColor]];
+    
+    return viewAux;
+    
 }
 
 -(UIImage *) audioImageLogGraph:(Float32 *) samples
@@ -151,8 +223,6 @@
     AVAssetReaderTrackOutput* output = [[AVAssetReaderTrackOutput alloc] initWithTrack:songTrack outputSettings:outputSettingsDict];
     
     [reader addOutput:output];
- 
-    
     UInt32 sampleRate,channelCount;
     
     NSArray* formatDesc = songTrack.formatDescriptions;
@@ -273,14 +343,14 @@
         
         UIImage *test = [self audioImageLogGraph:(Float32 *) fullSongData.bytes 
                                     normalizeMax:normalizeMax 
-                                     sampleCount:fullSongData.length / (sizeof(Float32) * 2) 
-                                    channelCount:2
-                                     imageHeight:100];
+                                     sampleCount:fullSongData.length / (sizeof(Float32))
+                                    channelCount:1
+                                     imageHeight:60];
         
         finalData = imageToData(test);
     }        
     
- 
+    NSLog(@"DCDCDCDCD %@",self);
     
     return finalData;
 }
