@@ -1,4 +1,5 @@
 
+[![](https://img.shields.io/npm/dm/react-native-audiowaveform.svg?style=flat-square)](https://www.npmjs.com/package/react-native-audiowaveform)
 # react-native-audiowaveform
 React Native component for visuaization of audio files waveform.
 Very early stage, will add more configuration options and styles eventually.
