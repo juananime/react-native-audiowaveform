@@ -19,6 +19,7 @@
 @property(nonatomic) NSDictionary * src;
 @property(nonatomic) BOOL autoPlay;
 @property(nonatomic) BOOL play;
+@property(nonatomic) BOOL stop;
 @property(nonatomic) NSDictionary * waveFormStyle;
 @property(nonatomic) UIColor * leftWaveColor;
 @property(nonatomic) UIColor * rightWaveColor;

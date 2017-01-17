@@ -17,6 +17,7 @@ RCT_EXPORT_VIEW_PROPERTY(waveFormStyle, NSDictionary);
 RCT_EXPORT_VIEW_PROPERTY(src, NSDictionary);
 RCT_EXPORT_VIEW_PROPERTY(autoPlay, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(play, BOOL);
+RCT_EXPORT_VIEW_PROPERTY(stop, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 
 
@@ -42,7 +43,7 @@ RCT_EXPORT_MODULE();
     
     
     
-    waveformView.onPress(@{@"onPress":@"true"});
+    waveformView.onPress(@{@"onPress":@"true",@"currentStatus":@"playing"});
     
     
 }

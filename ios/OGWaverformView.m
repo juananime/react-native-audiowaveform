@@ -40,6 +40,7 @@
     }
     _waveformImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
     [_waveformImage setImage:[UIImage imageWithData:[self renderPNGAudioPictogramLogForAssett:_asset]]];
+    _waveformImage.userInteractionEnabled = NO;
     
     //Scrubb player
     [self addSubview:_waveformImage];
@@ -52,21 +53,32 @@
     _scrubView = [self getPlayerScrub];
     [self addSubview:_scrubView];
     
+    [self initAudio];
+    
     if(_autoPlay)
         [self playAudio];
 }
 
+-(void)initAudio{
+    NSLog(@"PLAYING ::: %@",_soundPath);
+    NSURL *soundURL = [NSURL fileURLWithPath:_soundPath];
+    NSError *error = nil;
+    _player = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:&error];
+    if (error) {
+        NSLog(@"ERROR ::: %@",[error localizedDescription]);
+    }
+}
+
 
 -(void)setAutoPlay:(BOOL)autoPlay{
-    NSLog(@"PPPLLLAAAAYYY");
     _autoPlay=autoPlay;
-    
-    
 }
 
 -(void)setPlay:(BOOL)play{
     if(play){
         [self playAudio];
+    }else{
+        [self pauseAudio];
     }
 }
 
@@ -77,23 +89,19 @@
 }
 -(void)playAudio{
     
-    NSLog(@"PLAYING ::: %@",_soundPath);
-    NSURL *soundURL = [NSURL fileURLWithPath:_soundPath];
-    NSError *error = nil;
-    _player = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:&error];
-    
-    if (error) {
-        NSLog(@"ERROR ::: %@",[error localizedDescription]);
-    }
-    
-    [_player play];
-    _playbackTimer=[NSTimer scheduledTimerWithTimeInterval:0.5
+    _playbackTimer=[NSTimer scheduledTimerWithTimeInterval:0.1
                                                    target:self
                                                  selector:@selector(updateProgress:)
                                                  userInfo:nil
                                                   repeats:YES];
+    [_player play];
 }
 
+-(void)setStop:(BOOL)stop{
+    if(stop){
+        [_player stop];
+    }
+}
 
 //Update progress scrubb
 -(void)updateProgress:(NSTimer *)timer{
@@ -102,7 +110,7 @@
     
     float currentXPosScrub = f*self.frame.size.width;
     
-    [UIView animateWithDuration:1.0
+    [UIView animateWithDuration:0.1
                      animations:^{
                          CGRect frame = _scrubView.frame;
                          frame.origin.x = currentXPosScrub;
