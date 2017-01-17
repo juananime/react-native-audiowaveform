@@ -6,72 +6,73 @@
 
 import React, { Component } from 'react';
 import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
+    NativeModules,
+    AppRegistry,
+    StyleSheet,
+    Text,
+    View
 } from 'react-native';
 import  WaveForm  from './node_modules/react-native-audiowaveform'
 
 export default class audioWave extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-
-        <Text >
-          Audio waveform React Native
-        </Text>
-        <Text >
-          by Otomogroove
-        </Text>
-        <WaveForm style={styles.waveform}
-                  source={require('./audio/intro.mp3')}
-                  waveFormStyle={{leftWaveColor:'lightsalmon', rightWaveColor:'lightsalmon'}}
-        >
-
-        </WaveForm>
 
 
-        <WaveForm style={{flex:1, margin:10,backgroundColor:'lavenderblush'}}
-                  source={require('./audio/wildbot.mp3')}
-                  waveFormStyle={{leftWaveColor:'indigo', rightWaveColor:'indigo'}}>
 
-        </WaveForm>
-        <WaveForm style={styles.waveform}
-                  source={require('./audio/intro.mp3')}
-                  waveFormStyle={{leftWaveColor:'#ffffff', rightWaveColor:'#ffffff'}}>
 
-        </WaveForm>
-        <WaveForm style={{flex:1, margin:10,backgroundColor:'lightslategray'}}
-                  source={require('./audio/wildbot.mp3')}
-                  waveFormStyle={{leftWaveColor:'#ffffffff', rightWaveColor:'#ffffffff'}}>
+    render() {
+        return (
+            <View style={styles.container}>
+                <Text style={styles.welcome}>
+                    react-native-audiowaveform for IOS
+                </Text>
+                <Text style={styles.welcome} >
+                    by Otomogroove 2017
+                </Text>
 
-        </WaveForm>
-      </View>
-    );
-  }
+                {song1}
+
+                <WaveForm style={styles.waveform}
+                          source={require('./audio/intro.mp3')}
+                          waveFormStyle={{leftWaveColor:'#ffffff', rightWaveColor:'#ffffff'}}>
+
+
+                </WaveForm>
+                <WaveForm style={styles.waveform}
+                          autoPlay={true}
+                          source={require('./audio/wildbot.mp3')}
+                          waveFormStyle={{leftWaveColor:'lightgrey', rightWaveColor:'#ffffffff'}}>
+
+                </WaveForm>
+
+
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-      flexDirection:'column',
-      padding:20,
-      paddingTop:50,
-      backgroundColor:'lightsteelblue'
+    container: {
+        flex: 1,
+        flexDirection:'column',
+        padding:20,
+        paddingTop:50,
+        backgroundColor:'lightcyan'
 
-  },
-  waveform: {
-    flex:1,
-      margin:10,
-      backgroundColor:'black'
+    },
+    waveform: {
+        flex:1,
+        margin:10,
+        backgroundColor:'lightslategray'
 
 
-  },
+    },
     welcome:{
-    flex:4,
+        flex:0.2,
+        marginLeft:10,
     }
 
 });
-
+const song1 =  <WaveForm style={styles.waveform}
+                         source={require('./audio/intro.mp3')}
+                         waveFormStyle={{leftWaveColor:'lightgrey', rightWaveColor:'lightgrey'}} />
 AppRegistry.registerComponent('audioWave', () => audioWave);
