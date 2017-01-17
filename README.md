@@ -85,3 +85,14 @@ In order to detect touch, just IOS, call method onPress, also, switch play true/
                       />
 
 ```       
+
+
+Switching stop flag to true will stop and reset the audio, for example:
+```javascript
+<WaveForm style={this.props.style}
+                      onPress = {(sender) => this.myMethodWhereAfterPressIWillChangeStateStopAudioToTrue() }
+                      source={{uri:'https://url/path/to/the/file.mp3'}}
+                      stop={this.state.stopAudio? true:false}
+                      />
+```   
+                      
