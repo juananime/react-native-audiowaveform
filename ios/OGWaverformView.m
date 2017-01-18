@@ -18,7 +18,7 @@
 
 #define absX(x) (x<0?0-x:x)
 #define minMaxX(x,mn,mx) (x<=mn?mn:(x>=mx?mx:x))
-#define noiseFloor (-20.0)
+#define noiseFloor (-50.0)
 #define decibel(amplitude) (20.0 * log10(absX(amplitude)/32767.0))
 #define imgExt @"png"
 #define imageToData(x) UIImagePNGRepresentation(x)
@@ -32,18 +32,22 @@
     self.frame=frame;
 
     //Setup UI Views
+    NSLog(@"reactSetFrame ::: %@",_soundPath);
     
-    //Waveform image
-    if(_waveformImage){
-        [_waveformImage removeFromSuperview];
-        _waveformImage = nil;
-    }
-    _waveformImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
-    [_waveformImage setImage:[UIImage imageWithData:[self renderPNGAudioPictogramLogForAssett:_asset]]];
-    _waveformImage.userInteractionEnabled = NO;
+    _isFrameReady = YES;
     
-    //Scrubb player
-    [self addSubview:_waveformImage];
+
+    if(!_waveformImage)
+        [self drawWaveform];
+    
+    
+    [self addScrubber];
+    
+
+}
+
+-(void)addScrubber{
+    //Scrubber view
     if(_scrubView){
         
         
@@ -53,14 +57,28 @@
     _scrubView = [self getPlayerScrub];
     [self addSubview:_scrubView];
     
-    [self initAudio];
+}
+-(void)drawWaveform{
+    //Waveform image
+    if(!_isFrameReady || !_asset)
+        return;
+
     
-    if(_autoPlay)
-        [self playAudio];
+    if(_waveformImage){
+        [_waveformImage removeFromSuperview];
+        _waveformImage = nil;
+    }
+    NSLog(@"drawWaveform :::: %@",self);
+    _waveformImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height)];
+    [_waveformImage setImage:[UIImage imageWithData:[self renderPNGAudioPictogramLogForAssett:_asset]]];
+    _waveformImage.userInteractionEnabled = NO;
+    
+    //Scrubb player
+    [self addSubview:_waveformImage];
 }
 
 -(void)initAudio{
-    NSLog(@"PLAYING ::: %@",_soundPath);
+    NSLog(@"initAudio ::: %@",_soundPath);
     NSURL *soundURL = [NSURL fileURLWithPath:_soundPath];
     NSError *error = nil;
     _player = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:&error];
@@ -119,30 +137,63 @@
 }
 
 -(void)setSrc:(NSDictionary *)src{
-   
+   NSLog(@"SRC ::: %@",src);
     
     //Retrieve audio file
     
     NSString *uri =  [src objectForKey:@"uri"];
     
+    
+    
     //Since any file sent from JS side in Reeact Native is through HTTP, and
     //AVURLAsset just works wiht local files, then, downloading and processing.
-    
     NSURL  *remoteUrl = [NSURL URLWithString:uri];
-    NSData *urlData = [NSData dataWithContentsOfURL:remoteUrl];
-    if ( urlData )
-    {
-        NSString *fileName = [NSString stringWithFormat:@"%@.mp3",[OGWaveUtils randomStringWithLength:5]];
-        _soundPath = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
-        [urlData writeToFile:_soundPath atomically:YES];
-        NSURL * localUrl = [NSURL fileURLWithPath: _soundPath];
-        _asset = [AVURLAsset assetWithURL: localUrl];
-
-    }
+    
+    NSLog(@"NSURLRequest :: %@",remoteUrl);
+    NSURLRequest *request = [NSURLRequest requestWithURL:remoteUrl cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:30];
+    NSURLConnection *connection = [[NSURLConnection alloc]initWithRequest:request delegate:self startImmediately:YES ];
     
 
+    
+}
+
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+{
+    _mdata = [[NSMutableData alloc]init];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
+{
+    [_mdata appendData:data];
+}
+
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection
+{
+    
+    
+    NSString *fileName = [NSString stringWithFormat:@"%@.mp3",[OGWaveUtils randomStringWithLength:5]];
+    
+    _soundPath = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
+    [_mdata writeToFile:_soundPath atomically:YES];
+
+    NSURL * localUrl = [NSURL fileURLWithPath: _soundPath];
+    _asset = [AVURLAsset assetWithURL: localUrl];
+    
+    [self drawWaveform];
+    
+    [self addScrubber];
+    
+    [self initAudio];
+    
+    if(_autoPlay)
+        [self playAudio];
 
 }
+
+
+
 
 -(UIView *)getPlayerScrub{
     
@@ -174,7 +225,7 @@
     
     CGContextFillRect(context, rect);
     
-    CGContextSetLineWidth(context, 1.0);
+    CGContextSetLineWidth(context , 1  );
     
     float halfGraphHeight = (imageHeight / 2) / (float) channelCount ;
     float centerLeft = halfGraphHeight;
@@ -189,14 +240,14 @@
         CGContextSetStrokeColorWithColor(context, leftcolor);
         CGContextStrokePath(context);
         
-        if (channelCount==2) {
+       /** if (channelCount==2) {
             Float32 right = *samples++;
             float pixels = (right - noiseFloor) * sampleAdjustmentFactor;
             CGContextMoveToPoint(context, intSample, centerRight - pixels);
             CGContextAddLineToPoint(context, intSample, centerRight + pixels);
             CGContextSetStrokeColorWithColor(context, rightcolor);
             CGContextStrokePath(context);
-        }
+        }**/
     }
     
     // Create new image
@@ -377,6 +428,7 @@
 {
     if ((self = [super init])) {
         _bridge = bridge;
+        _isFrameReady = NO;
         
   
     }

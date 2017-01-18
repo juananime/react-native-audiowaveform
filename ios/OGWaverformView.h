@@ -13,13 +13,32 @@
 #import "OGWaveDelegateProtocol.h"
 @class RCTBridge;
 
-@interface OGWaverformView : UIView
+@interface OGWaverformView : UIView<NSURLConnectionDelegate>{
+    NSInteger _sampleCount;
+    Float32 _normalizeMax;
+    float _imageHeight;
+    float _imageWidth;
+    
+    Float32 *_samples;
+    CGSize _graphSize;
+}
+
+typedef enum {
+    DSWaveformStyleStripes = 0,
+    DSWaveformStyleFull = 1
+} DSWaveformStyle;
 
 
+@property(nonatomic) UIColor *graphColor;
+@property(nonatomic) DSWaveformStyle style;
+
+@property(nonatomic) NSMutableData * mdata;
 @property(nonatomic) NSDictionary * src;
 @property(nonatomic) BOOL autoPlay;
 @property(nonatomic) BOOL play;
 @property(nonatomic) BOOL stop;
+
+@property(nonatomic) BOOL isFrameReady;
 @property(nonatomic) NSDictionary * waveFormStyle;
 @property(nonatomic) UIColor * leftWaveColor;
 @property(nonatomic) UIColor * rightWaveColor;
