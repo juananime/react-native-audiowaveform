@@ -49,12 +49,17 @@ Regarding Android is ready with waveform's rederization and audio playback. Thus
 
 So far, reac-native-audiowaveform just generates a image view with the audio waveform data.
 In order to show graphically a local audio file, use:
+
+Basic custom styling: 
+prop.waveFormStyle.waveColor => Will set up color waveform
+prop.waveFormStyle.scrubColor => Will set up color sscrubber
+
 ```javascript
 import WaveForm from 'react-native-audiowaveform';
 
 <WaveForm 
     source={require('./path/to/your/file.mp3')}  
-    waveFormStyle={{leftWaveColor:'red', rightWaveColor:'#ffffff'}}
+    waveFormStyle={{waveColor:'red', scrubColor:'white'}}
 >
 </WaveForm>
 ```
@@ -76,7 +81,7 @@ Autoplayback flag, for both iOS and Android. Just call autoPlay property:
 ```
 
 
-In order to detect touch, just IOS, call method onPress, also, switch play true/false will play/pause audio:
+In order to detect touch, now bot in IOS and Andtoid, call method onPress, also, switch play true/false will play/pause audio:
 ```javascript
 <WaveForm style={this.props.style}
                       onPress = {(sender) => this.myMethodOnPress() }
