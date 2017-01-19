@@ -50,9 +50,12 @@ Regarding Android is ready with waveform's rederization and audio playback. Thus
 So far, reac-native-audiowaveform just generates a image view with the audio waveform data.
 In order to show graphically a local audio file, use:
 
-Basic custom styling: 
+Basic custom styling:
+
 prop.waveFormStyle.waveColor => Will set up color waveform
+
 prop.waveFormStyle.scrubColor => Will set up color sscrubber
+
 
 ```javascript
 import WaveForm from 'react-native-audiowaveform';
