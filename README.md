@@ -84,7 +84,7 @@ Autoplayback flag, for both iOS and Android. Just call autoPlay property:
 ```
 
 
-In order to detect touch, now bot in IOS and Andtoid, call method onPress, also, switch play true/false will play/pause audio:
+In order to detect touch, now both in IOS and Android, call method onPress, also, switch play true/false will play/pause audio:
 ```javascript
 <WaveForm style={this.props.style}
                       onPress = {(sender) => this.myMethodOnPress() }
