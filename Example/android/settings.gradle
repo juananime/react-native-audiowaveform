@@ -1,3 +1,3 @@
 rootProject.name = 'audioWave'
 
-include ':app'
+include ':app', ':OGWave', ':waveformVisualizerLite'

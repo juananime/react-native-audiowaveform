@@ -13,10 +13,15 @@ import {
     View
 } from 'react-native';
 import  WaveForm  from './node_modules/react-native-audiowaveform'
-
+import WaveformWrapper from './WaveformWrapper'
 export default class audioWave extends Component {
 
 
+    _onPressButton(sender) {
+        console.log("XSXSXS ::: STTTTTTTTTTTs :: "+sender.nativeEvent.onPress);
+        song1.play();
+
+    }
 
 
     render() {
@@ -29,27 +34,23 @@ export default class audioWave extends Component {
                     by Otomogroove 2017
                 </Text>
 
-                {song1}
-
-                <WaveForm style={styles.waveform}
-                          source={require('./audio/intro.mp3')}
-                          waveFormStyle={{leftWaveColor:'#ffffff', rightWaveColor:'#ffffff'}}>
 
 
-                </WaveForm>
-                <WaveForm style={styles.waveform}
-                          autoPlay={true}
-                          source={require('./audio/wildbot.mp3')}
-                          waveFormStyle={{leftWaveColor:'lightgrey', rightWaveColor:'#ffffffff'}}>
 
-                </WaveForm>
+
+
+
+                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'gray',scrubColor:'white'}} source={require('./audio/wildbot.mp3')}/>
+                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'gray',scrubColor:'white'}} source={require('./audio/wildbot.mp3')}/>
+
 
 
             </View>
         );
     }
 }
-
+var  colors = ['#ddd', '#efefef', 'red', '#666', 'rgba(0,0,0,.1)', '#ededed'];
+var backgroundcolors = ['green', 'black', 'orange', 'blue', 'purple', 'pink'];
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -72,8 +73,5 @@ const styles = StyleSheet.create({
     }
 
 });
-const song1 =  <WaveForm style={styles.waveform}
 
-                         source={require('./audio/intro.mp3')}
-                         waveFormStyle={{leftWaveColor:'lightgrey', rightWaveColor:'lightgrey'}} />
 AppRegistry.registerComponent('audioWave', () => audioWave);

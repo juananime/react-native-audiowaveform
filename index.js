@@ -1,6 +1,13 @@
+/**
+ * Created by juanjimenez on 07/12/2016.
+ * Otomogroove ltd 2017
+ */
+
 'use strict';
 import React, {Component, PropTypes} from 'react';
 var {
+    Platform,
+    DeviceEventEmitter,
     TouchableHighlight,
     processColor,
     StyleSheet,
@@ -16,9 +23,10 @@ const WaveForm = React.createClass({
         ...View.propTypes,
         autoPlay:React.PropTypes.bool,
         waveFormStyle:PropTypes.shape({
-            leftWaveColor: React.PropTypes.string,
-            rightWaveColor: React.PropTypes.string
+            waveColor: React.PropTypes.string,
+            scrubColor: React.PropTypes.string
         }),
+        componentID:PropTypes.string,
         src: PropTypes.shape({
             uri: PropTypes.string,
             isNetwork: PropTypes.bool,
@@ -42,16 +50,55 @@ const WaveForm = React.createClass({
 
 
     },
+    _makeid()
+{
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for( var i=0; i < 5; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+    return text;
+},
+
 
     _onPress(e:Event) {
 
 
-        if (!this.props.onPress) {
-            return;
+        if(Platform.OS == 'ios'){
+            if (!this.props.onPress) {
+                return;
+            }
+
+            console.log("OJOKOOKOK");
+
+            this.props.onPress(e) && this.props.onPress;
+
+
+
+        }else{
+            if(e.componentID == this.state.componentID){
+                if (!this.props.onPress) {
+                    return;
+                }
+
+                console.log("OJOKOOKOK");
+
+                this.props.onPress(e) && this.props.onPress;
+            }
         }
 
-        this.props.onPress(e) && this.props.onPress;
+
     },
+    componentWillMount: function() {
+        DeviceEventEmitter.addListener('OGOnPress', (e) => this._onPress(e));
+        const componentID = this._makeid();
+        this.setState({componentID: componentID})
+
+    },
+
+
+
     render: function () {
         const source = resolveAssetSource(this.props.source) || {};
 
@@ -73,8 +120,8 @@ const WaveForm = React.createClass({
         Object.assign(nativeProps, {
             autoPlay:this.props.autoPlay,
             waveFormStyle:{
-                rightWaveColor:processColor(this.props.waveFormStyle.rightWaveColor),
-                leftWaveColor:processColor(this.props.waveFormStyle.leftWaveColor),
+                waveColor:processColor(this.props.waveFormStyle.waveColor),
+                scrubColor:processColor(this.props.waveFormStyle.scrubColor),
             },
 
             src: {
@@ -84,7 +131,8 @@ const WaveForm = React.createClass({
                 type: source.type,
                 mainVer: source.mainVer || 0,
                 patchVer: source.patchVer || 0,
-            }
+            },
+            componentID:this.state.componentID,
 
         });
 

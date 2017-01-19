@@ -24,8 +24,8 @@
 #define imageToData(x) UIImagePNGRepresentation(x)
 
 -(void)setWaveFormStyle:(NSDictionary *)waveFormStyle{
-    _leftWaveColor = [RCTConvert UIColor:[waveFormStyle objectForKey:@"leftWaveColor"]];
-    _rightWaveColor = [RCTConvert UIColor:[waveFormStyle objectForKey:@"rightWaveColor"]];
+    _waveColor = [RCTConvert UIColor:[waveFormStyle objectForKey:@"waveColor"]];
+    _scrubColor = [RCTConvert UIColor:[waveFormStyle objectForKey:@"scrubColor"]];
 }
 
 -(void)reactSetFrame:(CGRect)frame{
@@ -198,7 +198,7 @@
 -(UIView *)getPlayerScrub{
     
     UIView *viewAux = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2,self.frame.size.height )];
-    [viewAux setBackgroundColor:[UIColor redColor]];
+    [viewAux setBackgroundColor:_scrubColor];
     return viewAux;
 }
 
@@ -218,10 +218,10 @@
     rect.size = imageSize;
     rect.origin.x = 0;
     rect.origin.y = 0;
-    NSLog(@"RColor : %@",_rightWaveColor);
-    NSLog(@"LColor : %@",_leftWaveColor);
-    CGColorRef leftcolor = [_leftWaveColor CGColor];
-    CGColorRef rightcolor = [_rightWaveColor CGColor];
+    
+    NSLog(@"LColor : %@",_waveColor);
+    CGColorRef wavecolor = [_waveColor CGColor];
+    
     
     CGContextFillRect(context, rect);
     
@@ -237,7 +237,7 @@
         float pixels = (left - noiseFloor) * sampleAdjustmentFactor;
         CGContextMoveToPoint(context, intSample, centerLeft-pixels);
         CGContextAddLineToPoint(context, intSample, centerLeft+pixels);
-        CGContextSetStrokeColorWithColor(context, leftcolor);
+        CGContextSetStrokeColorWithColor(context, wavecolor);
         CGContextStrokePath(context);
         
        /** if (channelCount==2) {

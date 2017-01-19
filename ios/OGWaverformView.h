@@ -40,8 +40,8 @@ typedef enum {
 
 @property(nonatomic) BOOL isFrameReady;
 @property(nonatomic) NSDictionary * waveFormStyle;
-@property(nonatomic) UIColor * leftWaveColor;
-@property(nonatomic) UIColor * rightWaveColor;
+@property(nonatomic) UIColor * waveColor;
+@property(nonatomic) UIColor * scrubColor;
 @property(nonatomic) AVURLAsset *asset;
 @property(nonatomic) UIView *scrubView;
 @property(nonatomic) UIImageView *waveformImage;

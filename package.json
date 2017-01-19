@@ -1,22 +1,117 @@
-
 {
-  "name": "react-native-audiowaveform",
-  "version": "1.0.37",
+  "_args": [
+    [
+      {
+        "raw": "react-native-audiowaveform@^1.0.39",
+        "scope": null,
+        "escapedName": "react-native-audiowaveform",
+        "name": "react-native-audiowaveform",
+        "rawSpec": "^1.0.39",
+        "spec": ">=1.0.39 <2.0.0",
+        "type": "range"
+      },
+      "/Users/juanjimenez/otomogroove_projects/waveformGrapReactNative/audioWave"
+    ],
+    [
+      {
+        "raw": "react-native-audiowaveform@^1.0.4",
+        "scope": null,
+        "escapedName": "react-native-audiowaveform",
+        "name": "react-native-audiowaveform",
+        "rawSpec": "^1.0.4",
+        "spec": ">=1.0.4 <2.0.0",
+        "type": "range"
+      },
+      "/Users/juanjimenez/otomogroove_projects/waveformGrapReactNative/audioWave"
+    ],
+    [
+      {
+        "raw": "react-native-audiowaveform",
+        "scope": null,
+        "escapedName": "react-native-audiowaveform",
+        "name": "react-native-audiowaveform",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/juanjimenez/otomogroove_projects/waveformGrapReactNative/audioWave"
+    ]
+  ],
+  "_from": "react-native-audiowaveform",
+  "_id": "react-native-audiowaveform@1.0.41",
+  "_inCache": true,
+  "_location": "/react-native-audiowaveform",
+  "_nodeVersion": "7.4.0",
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/react-native-audiowaveform-1.0.41.tgz_1484399928851_0.5488431572448462"
+  },
+  "_npmUser": {
+    "name": "otomogroove",
+    "email": "juan@otomogroove.com"
+  },
+  "_npmVersion": "4.0.5",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "react-native-audiowaveform",
+    "scope": null,
+    "escapedName": "react-native-audiowaveform",
+    "name": "react-native-audiowaveform",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-audiowaveform/-/react-native-audiowaveform-1.0.41.tgz",
+  "_shasum": "1568a9e3ee1e2008991242e5a53c2b89fc1c57fa",
+  "_shrinkwrap": null,
+  "_spec": "react-native-audiowaveform",
+  "_where": "/Users/juanjimenez/otomogroove_projects/waveformGrapReactNative/audioWave",
+  "author": {
+    "name": "Otomogroove 2017"
+  },
+  "bugs": {
+    "url": "https://github.com/juananime/react-native-audiowaveform/issues"
+  },
+  "dependencies": {},
   "description": "Audio Waveform visualization and sound renderization for React Native",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "1568a9e3ee1e2008991242e5a53c2b89fc1c57fa",
+    "tarball": "https://registry.npmjs.org/react-native-audiowaveform/-/react-native-audiowaveform-1.0.41.tgz"
+  },
+  "gitHead": "254af600c21b2157f208822f2631ea18d171a5e3",
+  "homepage": "https://github.com/juananime/react-native-audiowaveform#readme",
+  "keywords": [
+    "react-native",
+    "audio",
+    "waveform",
+    "sound"
+  ],
+  "license": "WTFPL",
   "main": "index.js",
+  "maintainers": [
+    {
+      "name": "otomogroove",
+      "email": "juan@otomogroove.com"
+    }
+  ],
+  "name": "react-native-audiowaveform",
+  "optionalDependencies": {},
+  "peerDependencies": {
+    "react-native": "^0.29.0"
+  },
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juananime/react-native-audiowaveform.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository" :
-  { "type" : "git"
-  , "url" : "https://github.com/juananime/react-native-audiowaveform"
-  },
-  "keywords": [
-    "react-native"
-  ],
-  "author": "otomogroove 2017",
-  "license": "",
-  "peerDependencies": {
-    "react-native": "^0.29.0"
-  }
+  "version": "1.0.4593"
 }
