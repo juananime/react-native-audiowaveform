@@ -28,7 +28,7 @@ export default class audioWave extends Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>
-                    react-native-audiowaveform for IOS
+                    react-native-audiowaveform for Android
                 </Text>
                 <Text style={styles.welcome} >
                     by Otomogroove 2017
@@ -40,8 +40,16 @@ export default class audioWave extends Component {
 
 
 
-                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'gray',scrubColor:'white'}} source={require('./audio/wildbot.mp3')}/>
-                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'gray',scrubColor:'white'}} source={require('./audio/wildbot.mp3')}/>
+                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'blue',scrubColor:'white'}} source={require('./audio/wildbot.mp3')}>
+                    <Text>
+                        by Otomogroove 2017
+                    </Text>
+                </WaveformWrapper>
+                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'white',scrubColor:'blue'}} source={require('./audio/intro.mp3')}/>
+                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'white',scrubColor:'blue'}} source={require('./audio/intro.mp3')}/>
+                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'red',scrubColor:'blue'}} source={require('./audio/intro.mp3')}/>
+                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'pink',scrubColor:'blue'}} source={require('./audio/intro.mp3')}/>
+                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'white',scrubColor:'blue'}} source={require('./audio/intro.mp3')}/>
 
 
 

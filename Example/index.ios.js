@@ -40,8 +40,8 @@ export default class audioWave extends Component {
 
 
 
-                <WaveformWrapper    autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'gray',scrubColor:'white'}} source={require('./audio/wildbot.mp3')}/>
-                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'gray',scrubColor:'white'}} source={require('./audio/wildbot.mp3')}/>
+                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'lightsteelblue',scrubColor:'white'}} source={require('./audio/wildbot.mp3')}/>
+                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'lightsteelblue',scrubColor:'white'}} source={require('./audio/wildbot.mp3')}/>
 
 
 
