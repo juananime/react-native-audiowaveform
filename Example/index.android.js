@@ -45,11 +45,6 @@ export default class audioWave extends Component {
                         by Otomogroove 2017
                     </Text>
                 </WaveformWrapper>
-                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'white',scrubColor:'blue'}} source={require('./audio/intro.mp3')}/>
-                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'white',scrubColor:'blue'}} source={require('./audio/intro.mp3')}/>
-                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'red',scrubColor:'blue'}} source={require('./audio/intro.mp3')}/>
-                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'pink',scrubColor:'blue'}} source={require('./audio/intro.mp3')}/>
-                <WaveformWrapper autoPlay={false} style={styles.waveform} waveFormStyle={{waveColor:'white',scrubColor:'blue'}} source={require('./audio/intro.mp3')}/>
 
 
 
