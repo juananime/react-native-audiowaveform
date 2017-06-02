@@ -177,7 +177,7 @@
 {
     
     
-    NSString *fileName = [NSString stringWithFormat:@"%@.mp3",[OGWaveUtils randomStringWithLength:5]];
+    NSString *fileName = [NSString stringWithFormat:@"%@.aac",[OGWaveUtils randomStringWithLength:5]];
     
     _soundPath = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
     [_mdata writeToFile:_soundPath atomically:YES];
