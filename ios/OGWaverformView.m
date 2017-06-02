@@ -81,7 +81,8 @@
     NSLog(@"initAudio ::: %@",_soundPath);
     NSURL *soundURL = [NSURL fileURLWithPath:_soundPath];
     NSError *error = nil;
-    _player = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL error:&error];
+    _player =[[AVPlayer alloc]initWithURL:soundURL];
+    //_player = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL fileTypeHint:AVFileTypeAIFF error:&error];
     if (error) {
         NSLog(@"ERROR ::: %@",[error localizedDescription]);
     }
@@ -117,14 +118,17 @@
 
 -(void)setStop:(BOOL)stop{
     if(stop){
-        [_player stop];
+        //[_player stop];
     }
 }
 
 //Update progress scrubb
 -(void)updateProgress:(NSTimer *)timer{
-    float total=_player.duration;
-    float f=_player.currentTime / total;
+    AVPlayerItem *currentItem = _player.currentItem;
+    float total = CMTimeGetSeconds(currentItem.duration);
+    float currentTime = CMTimeGetSeconds(currentItem.currentTime);
+    float f = 0.0;
+    f = currentTime / total;
     
     float currentXPosScrub = f*self.frame.size.width;
     
