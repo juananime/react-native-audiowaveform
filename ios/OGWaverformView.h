@@ -46,12 +46,14 @@ typedef enum {
 @property(nonatomic) UIView *scrubView;
 @property(nonatomic) UIImageView *waveformImage;
 @property(nonatomic) NSString *soundPath;
-@property(nonatomic) AVAudioPlayer *player ;
+//@property(nonatomic) AVAudioPlayer *player ;
+@property(nonatomic) AVPlayer *player ;
 @property(nonatomic) NSTimer * playbackTimer;
 @property(nonatomic) id<OGWaveDelegateProtocol> delegate;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
 
-@property (nonatomic, strong) AVAudioPlayer *_audioPlayer;
+//@property (nonatomic, strong) AVAudioPlayer *_audioPlayer;
+@property (nonatomic, strong) AVPlayer *_audioPlayer;
 
 - (instancetype)initWithBridge:(RCTBridge *)bridge NS_DESIGNATED_INITIALIZER;
 - (NSData *) renderPNGAudioPictogramLogForAssett:(AVURLAsset *)songAsset;
