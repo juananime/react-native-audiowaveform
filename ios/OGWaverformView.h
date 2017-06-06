@@ -51,6 +51,7 @@ typedef enum {
 @property(nonatomic) NSTimer * playbackTimer;
 @property(nonatomic) id<OGWaveDelegateProtocol> delegate;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
+@property(nonatomic) NSDictionary * propSrc;
 
 //@property (nonatomic, strong) AVAudioPlayer *_audioPlayer;
 @property (nonatomic, strong) AVPlayer *_audioPlayer;
@@ -58,6 +59,5 @@ typedef enum {
 - (instancetype)initWithBridge:(RCTBridge *)bridge NS_DESIGNATED_INITIALIZER;
 - (NSData *) renderPNGAudioPictogramLogForAssett:(AVURLAsset *)songAsset;
 - (void)updateProgress:(NSTimer*)timer;
-
 
 @end

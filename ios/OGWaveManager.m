@@ -20,8 +20,6 @@ RCT_EXPORT_VIEW_PROPERTY(play, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(stop, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
 
-
-
 - (UIView *)view
 {
     
@@ -41,10 +39,6 @@ RCT_EXPORT_MODULE();
     if(!waveformView.onPress)
         return;
     
-    
-    
     waveformView.onPress(@{@"onPress":@"true",@"currentStatus":@"playing"});
-    
-    
 }
 @end
