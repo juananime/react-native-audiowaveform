@@ -77,10 +77,21 @@
     NSURL *soundURL = [NSURL fileURLWithPath:_soundPath];
     NSError *error = nil;
     _player =[[AVPlayer alloc]initWithURL:soundURL];
+    
+    // Subscribe to the AVPlayerItem's DidPlayToEndTime notification.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:_player.currentItem];
+    
     //_player = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL fileTypeHint:AVFileTypeAIFF error:&error];
     if (error) {
         NSLog(@"ERROR ::: %@",[error localizedDescription]);
     }
+}
+
+-(void)itemDidFinishPlaying:(NSNotification *) notification {
+    // Will be called when AVPlayer finishes playing playerItem
+    NSLog(@"play finished ::: %@",_soundPath);
+    [_player seekToTime:CMTimeMake(0,1)];
+
 }
 
 -(void)setAutoPlay:(BOOL)autoPlay{
@@ -122,7 +133,10 @@
     float total = CMTimeGetSeconds(currentItem.duration);
     float currentTime = CMTimeGetSeconds(currentItem.currentTime);
     float f = 0.0;
-    f = currentTime / total;
+    if (total && total != 0.0)
+    {
+        f = currentTime / total;
+    }
     
     float currentXPosScrub = f*self.frame.size.width;
     
@@ -134,8 +148,12 @@
                      }];
 }
 
+-(void)setVolume:(float)volume{
+    [_player setVolume:volume];
+}
+
 -(void)setSrc:(NSDictionary *)src{
-    _propSrc = src;
+//    _propSrc = src;
     NSLog(@"SRC ::: %@",src);
     
     //Retrieve audio file

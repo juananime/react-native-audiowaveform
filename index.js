@@ -40,6 +40,7 @@ const WaveForm = React.createClass({
         play:PropTypes.bool,
         stop:PropTypes.bool,
         pause:PropTypes.bool,
+        volume:PropTypes.number,
         onPress:PropTypes.func,
         pressed:PropTypes.bool,
     },
