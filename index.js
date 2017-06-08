@@ -16,8 +16,6 @@ var {
 } = require('react-native');
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
-
-
 const WaveForm = React.createClass({
     propTypes: {
         ...View.propTypes,
@@ -42,13 +40,9 @@ const WaveForm = React.createClass({
         play:PropTypes.bool,
         stop:PropTypes.bool,
         pause:PropTypes.bool,
+        volume:PropTypes.number,
         onPress:PropTypes.func,
         pressed:PropTypes.bool,
-
-     
-
-
-
     },
     _makeid()
 {
@@ -61,9 +55,7 @@ const WaveForm = React.createClass({
     return text;
 },
 
-
     _onPress(e:Event) {
-
 
         if(Platform.OS == 'ios'){
             if (!this.props.onPress) {
@@ -71,10 +63,7 @@ const WaveForm = React.createClass({
             }
 
             console.log("OJOKOOKOK");
-
             this.props.onPress(e) && this.props.onPress;
-
-
 
         }else{
             if(e.componentID == this.state.componentID){
@@ -97,8 +86,6 @@ const WaveForm = React.createClass({
 
     },
 
-
-
     render: function () {
         const source = resolveAssetSource(this.props.source) || {};
 
@@ -107,21 +94,18 @@ const WaveForm = React.createClass({
             uri = `file://${uri}`;
         }
 
-
         const isNetwork = !!(uri && uri.match(/^https?:/));
         const isAsset = !!(uri && uri.match(/^(assets-library|file|content|ms-appx|ms-appdata):/));
 
-
         //this.props.waveFormStyle.leftWaveColor=processColor(this.props.waveFormStyle.leftWaveColor)
         //this.props.waveFormStyle.rightWaveColor=processColor(this.props.waveFormStyle.rightWaveColor)
-
 
         const nativeProps = Object.assign({}, this.props);
         Object.assign(nativeProps, {
             autoPlay:this.props.autoPlay,
             waveFormStyle:{
-                waveColor:processColor(this.props.waveFormStyle.waveColor),
-                scrubColor:processColor(this.props.waveFormStyle.scrubColor),
+                ogWaveColor:processColor(this.props.waveFormStyle.waveColor),
+                ogScrubColor:processColor(this.props.waveFormStyle.scrubColor),
             },
 
             src: {
@@ -133,17 +117,13 @@ const WaveForm = React.createClass({
                 patchVer: source.patchVer || 0,
             },
             componentID:this.state.componentID,
-
         });
-
 
         return <OGWaverformView {...nativeProps} onPress={this._onPress} />;
     }
-
 });
 
 var OGWaverformView = requireNativeComponent('OGWave', WaveForm);
-
 
 module.exports = WaveForm;
 

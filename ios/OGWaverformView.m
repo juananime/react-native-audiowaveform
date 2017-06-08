@@ -24,8 +24,8 @@
 #define imageToData(x) UIImagePNGRepresentation(x)
 
 -(void)setWaveFormStyle:(NSDictionary *)waveFormStyle{
-    _waveColor = [RCTConvert UIColor:[waveFormStyle objectForKey:@"waveColor"]];
-    _scrubColor = [RCTConvert UIColor:[waveFormStyle objectForKey:@"scrubColor"]];
+    _waveColor = [RCTConvert UIColor:[waveFormStyle objectForKey:@"ogWaveColor"]];
+    _scrubColor = [RCTConvert UIColor:[waveFormStyle objectForKey:@"ogScrubColor"]];
 }
 
 -(void)reactSetFrame:(CGRect)frame{
@@ -35,14 +35,11 @@
     NSLog(@"reactSetFrame ::: %@",_soundPath);
     
     _isFrameReady = YES;
-    
 
     if(!_waveformImage)
         [self drawWaveform];
     
-    
     [self addScrubber];
-    
 
 }
 
@@ -50,20 +47,18 @@
     //Scrubber view
     if(_scrubView){
         
-        
         [_scrubView removeFromSuperview];
         _scrubView = nil;
     }
     _scrubView = [self getPlayerScrub];
     [self addSubview:_scrubView];
-    
 }
+
 -(void)drawWaveform{
     //Waveform image
     if(!_isFrameReady || !_asset)
         return;
 
-    
     if(_waveformImage){
         [_waveformImage removeFromSuperview];
         _waveformImage = nil;
@@ -82,12 +77,22 @@
     NSURL *soundURL = [NSURL fileURLWithPath:_soundPath];
     NSError *error = nil;
     _player =[[AVPlayer alloc]initWithURL:soundURL];
+    
+    // Subscribe to the AVPlayerItem's DidPlayToEndTime notification.
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:_player.currentItem];
+    
     //_player = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL fileTypeHint:AVFileTypeAIFF error:&error];
     if (error) {
         NSLog(@"ERROR ::: %@",[error localizedDescription]);
     }
 }
 
+-(void)itemDidFinishPlaying:(NSNotification *) notification {
+    // Will be called when AVPlayer finishes playing playerItem
+    NSLog(@"play finished ::: %@",_soundPath);
+    [_player seekToTime:CMTimeMake(0,1)];
+
+}
 
 -(void)setAutoPlay:(BOOL)autoPlay{
     _autoPlay=autoPlay;
@@ -128,7 +133,10 @@
     float total = CMTimeGetSeconds(currentItem.duration);
     float currentTime = CMTimeGetSeconds(currentItem.currentTime);
     float f = 0.0;
-    f = currentTime / total;
+    if (total && total != 0.0)
+    {
+        f = currentTime / total;
+    }
     
     float currentXPosScrub = f*self.frame.size.width;
     
@@ -140,14 +148,16 @@
                      }];
 }
 
+-(void)setVolume:(float)volume{
+    [_player setVolume:volume];
+}
+
 -(void)setSrc:(NSDictionary *)src{
-   NSLog(@"SRC ::: %@",src);
+//    _propSrc = src;
+    NSLog(@"SRC ::: %@",src);
     
     //Retrieve audio file
-    
     NSString *uri =  [src objectForKey:@"uri"];
-    
-    
     
     //Since any file sent from JS side in Reeact Native is through HTTP, and
     //AVURLAsset just works wiht local files, then, downloading and processing.
@@ -156,11 +166,7 @@
     NSLog(@"NSURLRequest :: %@",remoteUrl);
     NSURLRequest *request = [NSURLRequest requestWithURL:remoteUrl cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:30];
     NSURLConnection *connection = [[NSURLConnection alloc]initWithRequest:request delegate:self startImmediately:YES ];
-    
-
-    
 }
-
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
@@ -172,11 +178,8 @@
     [_mdata appendData:data];
 }
 
-
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    
-    
     NSString *fileName = [NSString stringWithFormat:@"%@.aac",[OGWaveUtils randomStringWithLength:5]];
     
     _soundPath = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
@@ -195,9 +198,6 @@
         [self playAudio];
 
 }
-
-
-
 
 -(UIView *)getPlayerScrub{
     
@@ -270,7 +270,9 @@
     NSError * error = nil;
     
     AVAssetReader * reader = [[AVAssetReader alloc] initWithAsset:songAsset error:&error];
-    
+    if (songAsset.tracks.count == 0) {
+        return nil;
+    }
     AVAssetTrack * songTrack = [songAsset.tracks objectAtIndex:0];
     
     NSDictionary* outputSettingsDict = [[NSDictionary alloc] initWithObjectsAndKeys:
