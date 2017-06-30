@@ -14,7 +14,7 @@ Regarding Android is ready with waveform's rederization and audio playback. Thus
 
 ## Getting started
 
-`$ npm react-native-audiowaveform --save`
+`$ npm install react-native-audiowaveform --save`
 
 ### Mostly automatic installation
 
