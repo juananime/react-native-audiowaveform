@@ -5,7 +5,7 @@
 
 'use strict';
 import React, {Component, PropTypes} from 'react';
-var {
+import {
     Platform,
     DeviceEventEmitter,
     TouchableHighlight,
@@ -13,17 +13,18 @@ var {
     StyleSheet,
     View,
     requireNativeComponent
-} = require('react-native');
+} from 'react-native';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
-const WaveForm = React.createClass({
-    propTypes: {
+
+export default class WaveForm extends Component{
+    static propTypes = {
         ...View.propTypes,
         autoPlay:React.PropTypes.bool,
         waveFormStyle:PropTypes.shape({
             waveColor: React.PropTypes.string,
             scrubColor: React.PropTypes.string
-        }),
+         }),
         componentID:PropTypes.string,
         src: PropTypes.shape({
             uri: PropTypes.string,
@@ -34,16 +35,17 @@ const WaveForm = React.createClass({
             PropTypes.shape({
                 uri: PropTypes.string
             }),
-            // Opaque type returned by require('./video.mp4')
-            PropTypes.number
-        ]),
+             // Opaque type returned by require('./video.mp4')
+             PropTypes.number
+            ]),
         play:PropTypes.bool,
         stop:PropTypes.bool,
         pause:PropTypes.bool,
         volume:PropTypes.number,
         onPress:PropTypes.func,
         pressed:PropTypes.bool,
-    },
+
+    }
     _makeid()
 {
     var text = "";
@@ -53,7 +55,7 @@ const WaveForm = React.createClass({
         text += possible.charAt(Math.floor(Math.random() * possible.length));
 
     return text;
-},
+}
 
     _onPress(e:Event) {
 
@@ -62,7 +64,7 @@ const WaveForm = React.createClass({
                 return;
             }
 
-            console.log("OJOKOOKOK");
+
             this.props.onPress(e) && this.props.onPress;
 
         }else{
@@ -71,22 +73,22 @@ const WaveForm = React.createClass({
                     return;
                 }
 
-                console.log("OJOKOOKOK");
+
 
                 this.props.onPress(e) && this.props.onPress;
             }
         }
 
 
-    },
-    componentWillMount: function() {
+    }
+    componentWillMount() {
         DeviceEventEmitter.addListener('OGOnPress', (e) => this._onPress(e));
         const componentID = this._makeid();
         this.setState({componentID: componentID})
 
-    },
+    }
 
-    render: function () {
+    render () {
         const source = resolveAssetSource(this.props.source) || {};
 
         let uri = source.uri;
@@ -121,11 +123,9 @@ const WaveForm = React.createClass({
 
         return <OGWaverformView {...nativeProps} onPress={this._onPress} />;
     }
-});
+};
 
-var OGWaverformView = requireNativeComponent('OGWave', WaveForm);
-
-module.exports = WaveForm;
+const OGWaverformView = requireNativeComponent('OGWave' , WaveForm)
 
 
 

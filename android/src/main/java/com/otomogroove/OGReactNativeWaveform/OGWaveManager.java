@@ -2,21 +2,21 @@ package com.otomogroove.OGReactNativeWaveform;
 
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.ViewGroup;
 
+
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.LifecycleEventListener;
+import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.ringdroid.WaveformView;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.math.BigInteger;
-import java.security.SecureRandom;
 
 import static com.facebook.react.common.ReactConstants.TAG;
 
@@ -24,12 +24,14 @@ import static com.facebook.react.common.ReactConstants.TAG;
  * Created by juanjimenez on 13/01/2017.
  */
 
-public class OGWaveManager extends SimpleViewManager<OGWaveView> implements LifecycleEventListener {
+public class OGWaveManager extends SimpleViewManager<OGWaveView> implements LifecycleEventListener,WaveformView.WaveformListener {
 
 
 
 
+    private Callback onPressCallback;
     public static final String REACT_CLASS = "OGWave";
+    private ReactContext mcontext;
     //private WaveformView mWaveView;
 
     @Override
@@ -39,52 +41,50 @@ public class OGWaveManager extends SimpleViewManager<OGWaveView> implements Life
     }
 
 
-    public class GenericExtFilter implements FilenameFilter {
 
-        private String ext;
-
-        public GenericExtFilter(String ext) {
-            this.ext = ext;
-        }
-
-        public boolean accept(File dir, String name) {
-            return (name.endsWith(ext));
-        }
-    }
-
-
-    /**void deleteFiles(String folder, String ext)
-    {
-        File dir = new File(folder);
-        if (!dir.exists())
-            return;
-        File[] files = dir.listFiles(new GenericExtFilter(ext));
-        for (File file : files)
-        {
-            if (!file.isDirectory())
-            {
-                boolean result = file.delete();
-                Log.d("TAG", "Deleted:" + result);
-            }
-        }
-    }**/
     @Override
     public OGWaveView createViewInstance(ThemedReactContext context) {
         context.addLifecycleEventListener(this);
+        mcontext = context;
 
        // deleteFiles(Environment.getExternalStorageDirectory().toString(),"mp3");
+        OGWaveView mWaveView = new OGWaveView(context);
 
-       // mWaveView = new WaveformView(context);
+        mWaveView.setWaveformListener(this);
 
-        return new OGWaveView(context);
+
+        return mWaveView;
     }
 
+    @Override
+    public void setTestId(OGWaveView view, String testId) {
+        super.setTestId(view, testId);
+        Log.e("XSXGOT","TTTTTTTTTT::: "+ testId);
+    }
+
+    @ReactMethod
+    public void testCallback(Callback cb) {
+
+        Log.e("XSXGOT","TESXT CA:LBACK CALLED!!! ");
+        String sampleText = "Java is fun";
+        int textLength = sampleText.length();
+        try{
+            cb.invoke(textLength);
+        }catch (Exception e){
+            cb.invoke("err");
+        }
+    }
 
    @ReactProp(name = "src")
     public void setSrc(OGWaveView view, @Nullable ReadableMap src) {
+        view.setURI(src.getString("uri"));
+    }
 
+    @ReactProp(name="componentID")
+    public void setComponentID(OGWaveView view, String componentID) {
+        Log.e("XSXGOT","componentID SETTED:::!!!!" +componentID);
+        view.setComponentID(componentID);
 
-       view.setURI(src.getString("uri"));
     }
 
 
@@ -100,18 +100,17 @@ public class OGWaveManager extends SimpleViewManager<OGWaveView> implements Life
     public void setWaveFormStyle(OGWaveView view, @Nullable ReadableMap waveFormStyle) {
 
 
-        view.setmWaveColor(waveFormStyle.getInt("rightWaveColor"));
+        view.setmWaveColor(waveFormStyle.getInt("ogWaveColor"));
+        view.setScrubColor(waveFormStyle.getInt("ogScrubColor"));
+    }
+    @ReactProp(name = "play")
+    public void setPlay(OGWaveView view, @Nullable boolean play) {
+
+            view.onPlay(play);
+
     }
 
- 
 
-    @ReactMethod
-    public void play(@Nullable Callback onPlayed){
-        Log.e(TAG, "XXXonPlay: " );
-
-        onPlayed.invoke("PLLLLAAYYYEDD");
-
-    }
 
    /** @ReactProp(name = "pause")
     public void setPause(OGWaveView view, @Nullable Callback pause){
@@ -141,10 +140,19 @@ public class OGWaveManager extends SimpleViewManager<OGWaveView> implements Life
 
     }
 
-
-    private   String random() {
-        return new BigInteger(130, new SecureRandom()).toString(32);
+    private void sendEvent(ReactContext reactContext,
+                           String eventName,
+                           @Nullable WritableMap params) {
+        reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, params);
     }
 
+    @Override
+    public void waveformTouchStart(ReactContext context, String componentID) {
+
+        WritableMap map = Arguments.createMap();
+        map.putString("componentID",componentID);
+        sendEvent(context, "OGOnPress",map);
+
+    }
 }
 
