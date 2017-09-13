@@ -17,6 +17,8 @@ public class OGUIWaveView extends View {
 
     private float mCurrentSeek = 0;
 
+    public int scrubColor;
+
     public OGUIWaveView(Context context) {
         super(context);
 
@@ -27,7 +29,7 @@ public class OGUIWaveView extends View {
 
     public void updatePlayHead(float currentSeek){
         mCurrentSeek = currentSeek;
-        Log.e(TAG, "onPostExecuteXXX: "+ mCurrentSeek);
+
         invalidate();
     }
     @Override
@@ -41,7 +43,7 @@ public class OGUIWaveView extends View {
         // Initialize a new Paint instance to draw the line
         Paint paint = new Paint();
         // Line color
-        paint.setColor(Color.RED);
+        paint.setColor(scrubColor);
         paint.setStyle(Paint.Style.STROKE);
         // Line width in pixels
         paint.setStrokeWidth(8);

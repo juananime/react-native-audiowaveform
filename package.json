@@ -108,7 +108,7 @@
   "maintainers": [
     {
       "name": "otomogroove",
-      "email": "juan@otomogroove.com"
+      "email": "info@otomogroove.com"
     }
   ],
   "name": "react-native-audiowaveform",
@@ -124,5 +124,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.0.48"
+  "version": "1.0.51"
 }

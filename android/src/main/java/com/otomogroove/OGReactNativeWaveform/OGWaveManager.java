@@ -152,6 +152,42 @@ public class OGWaveManager extends SimpleViewManager<OGWaveView> implements Life
         WritableMap map = Arguments.createMap();
         map.putString("componentID",componentID);
         sendEvent(context, "OGOnPress",map);
+        Log.e("OGTAGDEBUG::", "waveformTouchStart: " );
+
+    }
+
+    @Override
+    public void waveformTouchStart(float x) {
+
+    }
+
+    @Override
+    public void waveformTouchMove(float x) {
+
+    }
+
+    @Override
+    public void waveformTouchEnd() {
+
+    }
+
+    @Override
+    public void waveformFling(float x) {
+
+    }
+
+    @Override
+    public void waveformDraw() {
+
+    }
+
+    @Override
+    public void waveformZoomIn() {
+
+    }
+
+    @Override
+    public void waveformZoomOut() {
 
     }
 }

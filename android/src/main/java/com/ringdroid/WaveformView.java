@@ -32,6 +32,7 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
+import com.facebook.react.bridge.ReactContext;
 import com.ringdroid.soundfile.SoundFile;
 
 import java.io.BufferedInputStream;
@@ -199,6 +200,7 @@ public class WaveformView extends View {
     }
 
     public interface WaveformListener {
+        public void waveformTouchStart(ReactContext context, String componentID);
         public void waveformTouchStart(float x);
         public void waveformTouchMove(float x);
         public void waveformTouchEnd();
