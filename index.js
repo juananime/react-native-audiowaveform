@@ -4,7 +4,7 @@
  */
 
 'use strict';
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
 import {
     Platform,
     DeviceEventEmitter,
@@ -14,6 +14,7 @@ import {
     View,
     requireNativeComponent
 } from 'react-native';
+import PropTypes form 'prop-types'
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 
