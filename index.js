@@ -14,7 +14,7 @@ import {
     View,
     requireNativeComponent
 } from 'react-native';
-import PropTypes form 'prop-types'
+import PropTypes from 'prop-types'
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 
