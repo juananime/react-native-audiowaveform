@@ -58,7 +58,7 @@ export default class WaveForm extends Component{
     return text;
 }
 
-    _onPress(e:Event) {
+    _onPress = (e:Event) => {
 
         if(Platform.OS == 'ios'){
             if (!this.props.onPress) {
