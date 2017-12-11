@@ -14,7 +14,7 @@ import {
     View,
     requireNativeComponent
 } from 'react-native';
-import PropTypes form 'prop-types'
+import PropTypes from 'prop-types'
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
 
@@ -58,7 +58,7 @@ export default class WaveForm extends Component{
     return text;
 }
 
-    _onPress(e:Event) {
+    _onPress = (e:Event) => {
 
         if(Platform.OS == 'ios'){
             if (!this.props.onPress) {
