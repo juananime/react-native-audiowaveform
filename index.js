@@ -19,34 +19,38 @@ import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource'
 
 
 export default class WaveForm extends Component{
-    static propTypes = {
-        ...View.propTypes,
-        autoPlay:PropTypes.bool,
-        waveFormStyle:PropTypes.shape({
-            waveColor: PropTypes.string,
-            scrubColor: PropTypes.string
-         }),
-        componentID:PropTypes.string,
-        src: PropTypes.shape({
-            uri: PropTypes.string,
-            isNetwork: PropTypes.bool,
-            isAsset:PropTypes.bool,
-        }),
-        source: PropTypes.oneOfType([
-            PropTypes.shape({
-                uri: PropTypes.string
-            }),
-             // Opaque type returned by require('./video.mp4')
-             PropTypes.number
-            ]),
-        play:PropTypes.bool,
-        stop:PropTypes.bool,
-        pause:PropTypes.bool,
-        volume:PropTypes.number,
-        onPress:PropTypes.func,
-        pressed:PropTypes.bool,
+    constructor(props){
+    super(props)
+    this._onPress = this._onPress.bind(this)
+  }
+//     static propTypes = {
+//         ...View.propTypes,
+//         autoPlay:PropTypes.bool,
+//         waveFormStyle:PropTypes.shape({
+//             waveColor: PropTypes.string,
+//             scrubColor: PropTypes.string
+//          }),
+//         componentID:PropTypes.string,
+//         src: PropTypes.shape({
+//             uri: PropTypes.string,
+//             isNetwork: PropTypes.bool,
+//             isAsset:PropTypes.bool,
+//         }),
+//         source: PropTypes.oneOfType([
+//             PropTypes.shape({
+//                 uri: PropTypes.string
+//             }),
+//              // Opaque type returned by require('./video.mp4')
+//              PropTypes.number
+//             ]),
+//         play:PropTypes.bool,
+//         stop:PropTypes.bool,
+//         pause:PropTypes.bool,
+//         volume:PropTypes.number,
+//         onPress:PropTypes.func,
+//         pressed:PropTypes.bool,
 
-    }
+//     }
     _makeid()
 {
     var text = "";
