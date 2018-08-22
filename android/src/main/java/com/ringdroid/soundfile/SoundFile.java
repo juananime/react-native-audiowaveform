@@ -16,10 +16,20 @@
 
 package com.ringdroid.soundfile;
 
+import android.media.AudioFormat;
+import android.media.AudioRecord;
+import android.media.MediaCodec;
+import android.media.MediaExtractor;
+import android.media.MediaFormat;
+import android.media.MediaRecorder;
+import android.os.Environment;
+import android.util.Base64;
+import android.util.Log;
+
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -27,16 +37,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
 import java.util.Arrays;
-
-import android.media.AudioFormat;
-import android.media.AudioRecord;
-import android.media.MediaCodec;
-import android.media.MediaExtractor;
-import android.media.MediaFormat;
-import android.media.MediaRecorder;
-import android.os.Build;
-import android.os.Environment;
-import android.util.Log;
 
 public class SoundFile {
     private ProgressListener mProgressListener = null;
@@ -96,17 +96,53 @@ public class SoundFile {
         return false;
     }
 
+    public File getInputFile() {
+        return mInputFile;
+    }
+
+    // Parse data URI and stream into temporary file
+    private static File createFileFromDataUri(String dataUri) throws IOException {
+        String[] parts = dataUri.split(";base64,");
+        String type = parts[0].replace("data:audio/", "");
+        String base64 = parts[1];
+
+        Log.d("XSXGOT", base64);
+
+        byte[] data = Base64.decode(base64, Base64.DEFAULT);
+
+        File tempFile = File.createTempFile("audio-", "." + type, null);
+        FileOutputStream fos = new FileOutputStream(tempFile);
+        fos.write(data);
+        fos.flush();
+        fos.close();
+
+        return tempFile;
+    }
+
     // Create and return a SoundFile object using the file fileName.
     public static SoundFile create(String fileName,
                                    ProgressListener progressListener)
-        throws java.io.FileNotFoundException,
-               java.io.IOException, InvalidInputException {
+            throws java.io.FileNotFoundException,
+            java.io.IOException, InvalidInputException {
+
+        // Check if passed data URI and replace with temporary filename
+        if (fileName.startsWith("data:"))
+        {
+            Log.d("XSXGOT", "Parsing data URI: " + fileName);
+            fileName = createFileFromDataUri(fileName).getPath();
+        }
+
         // First check that the file exists and that its extension is supported.
         File f = new File(fileName);
         if (!f.exists()) {
-            throw new java.io.FileNotFoundException(fileName);
+            Log.d("XSXGOT", "File doesn't exist: " + fileName);
+            return null;
         }
+
+        Log.d("XSXGOT", "Created SoundFile at: " + f.getPath());
+
         String name = f.getName().toLowerCase();
+
         String[] components = name.split("\\.");
         if (components.length < 2) {
             return null;
@@ -174,17 +210,17 @@ public class SoundFile {
     public ShortBuffer getSamples() {
         return null;
         /**if (mDecodedSamples != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
-                Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
-                // Hack for Nougat where asReadOnlyBuffer fails to respect byte ordering.
-                // See https://code.google.com/p/android/issues/detail?id=223824
-                return mDecodedSamples;
-            } else {
-                return mDecodedSamples.asReadOnlyBuffer();
-            }
-        } else {
-            return null;
-        }**/
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N &&
+         Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1) {
+         // Hack for Nougat where asReadOnlyBuffer fails to respect byte ordering.
+         // See https://code.google.com/p/android/issues/detail?id=223824
+         return mDecodedSamples;
+         } else {
+         return mDecodedSamples.asReadOnlyBuffer();
+         }
+         } else {
+         return null;
+         }**/
     }
 
     // A SoundFile object should only be created using the static methods create() and record().
@@ -196,8 +232,8 @@ public class SoundFile {
     }
 
     private void ReadFile(File inputFile)
-        throws java.io.FileNotFoundException,
-               java.io.IOException, InvalidInputException {
+            throws java.io.FileNotFoundException,
+            java.io.IOException, InvalidInputException {
         MediaExtractor extractor = new MediaExtractor();
         MediaFormat format = null;
         int i;
@@ -223,7 +259,7 @@ public class SoundFile {
         mSampleRate = format.getInteger(MediaFormat.KEY_SAMPLE_RATE);
         // Expected total number of samples per channel.
         int expectedNumSamples =
-            (int)((format.getLong(MediaFormat.KEY_DURATION) / 1000000.f) * mSampleRate + 0.5f);
+                (int)((format.getLong(MediaFormat.KEY_DURATION) / 1000000.f) * mSampleRate + 0.5f);
 
         MediaCodec codec = MediaCodec.createDecoderByType(format.getString(MediaFormat.KEY_MIME));
         codec.configure(format, null, null, 0);
@@ -422,7 +458,7 @@ public class SoundFile {
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT,
                 minBufferSize
-                );
+        );
 
         // Allocate memory for 20 seconds first. Reallocate later if more is needed.
         mDecodedBytes = ByteBuffer.allocate(20 * mSampleRate * 2);
