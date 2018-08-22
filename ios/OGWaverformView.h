@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <React/RCTResizeMode.h>
 #import <AVFoundation/AVFoundation.h>
-#import "UIView+React.h"
+#import <React/UIView+React.h>
 #import "OGWaveDelegateProtocol.h"
 @class RCTBridge;
 
