@@ -3,9 +3,9 @@
 
 # react-native-audiowaveform
 React Native component for visuaization of audio files waveform.
-Basic renderization of audio waveforms with play, autoplay and stop control, as wel as progress and scrub control.
+Basic renderization of audio waveforms with play, autoplay and stop control, as well as progress and scrub control.
 
-Regarding Android is ready with waveform's rederization and audio playback. Thus has been implemented adapting the ringDroid audio libraries, but those need much performance improvement, working on it...
+Regarding Android is ready with waveform's renderization and audio playback. Thus has been implemented adapting the ringDroid audio libraries, but those need much performance improvement, working on it...
 
 
 
