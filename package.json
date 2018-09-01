@@ -1,53 +1,5 @@
 {
   "_args": [
-    [
-      {
-        "raw": "react-native-audiowaveform@^1.0.39",
-        "scope": null,
-        "escapedName": "react-native-audiowaveform",
-        "name": "react-native-audiowaveform",
-        "rawSpec": "^1.0.39",
-        "spec": ">=1.0.39 <2.0.0",
-        "type": "range"
-      },
-      "/Users/juanjimenez/otomogroove_projects/waveformGrapReactNative/audioWave"
-    ],
-    [
-      {
-        "raw": "react-native-audiowaveform@^1.0.4",
-        "scope": null,
-        "escapedName": "react-native-audiowaveform",
-        "name": "react-native-audiowaveform",
-        "rawSpec": "^1.0.4",
-        "spec": ">=1.0.4 <2.0.0",
-        "type": "range"
-      },
-      "/Users/juanjimenez/otomogroove_projects/waveformGrapReactNative/audioWave"
-    ],
-    [
-      {
-        "raw": "react-native-audiowaveform",
-        "scope": null,
-        "escapedName": "react-native-audiowaveform",
-        "name": "react-native-audiowaveform",
-        "rawSpec": "",
-        "spec": "latest",
-        "type": "tag"
-      },
-      "/Users/juanjimenez/otomogroove_projects/waveformGrapReactNative/audioWave"
-    ],
-    [
-      {
-        "raw": "react-native-audiowaveform@^1.0.471",
-        "scope": null,
-        "escapedName": "react-native-audiowaveform",
-        "name": "react-native-audiowaveform",
-        "rawSpec": "^1.0.471",
-        "spec": ">=1.0.471 <2.0.0",
-        "type": "range"
-      },
-      "/Users/juanjimenez/otomogroove_projects/wavetest/wavetest"
-    ]
   ],
   "_from": "react-native-audiowaveform@^1.0.471",
   "_id": "react-native-audiowaveform@1.0.471",
@@ -89,7 +41,29 @@
   },
   "dependencies": {},
   "description": "Audio Waveform visualization and sound renderization for React Native",
-  "devDependencies": {},
+  "devDependencies": {
+    "babel-preset-react-native-stage-0": "^1.0.1",
+    "jest": "^23.5.0",
+    "jest-react-native": "^18.0.0",
+    "react-test-renderer": "16.3.1",
+    "babel-jest": "22.0.4",
+    "babel-plugin-styled-components": "1.5.0",
+    "babel-preset-react-native": "4.0.0",
+    "chalk": "2.3.2",
+    "deep-freeze": "0.0.1",
+    "dot-object": "1.7.0",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.0.0",
+    "enzyme-to-json": "^3.0.1",
+    "eslint": "^4.19.1",
+    "eslint-config-bambi": "1.3.0",
+    "fbemitter": "^2.1.1",
+    "flow-bin": "0.67.1",
+    "prettier": "^1.13.5",
+    "prop-types": "^15.6.0",
+    "react-dom": "^16.0.0-alpha.12",
+    "react-native-debugger-utils": "1.0.0"
+  },
   "directories": {},
   "dist": {
     "shasum": "edffd87c688ba4e92955eadd527538f6ac7b282f",
@@ -114,7 +88,7 @@
   "name": "react-native-audiowaveform",
   "optionalDependencies": {},
   "peerDependencies": {
-    "react-native": "^0.29.0"
+    "react-native":"^0.56.0"
   },
   "readme": "ERROR: No README data found!",
   "repository": {
@@ -124,5 +98,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.0.51"
+  "version": "2.0.0"
 }
