@@ -88,7 +88,7 @@
   "name": "react-native-audiowaveform",
   "optionalDependencies": {},
   "peerDependencies": {
-    "react-native":"^0.56.0"
+    "react-native":"^0.54.0"
   },
   "readme": "ERROR: No README data found!",
   "repository": {
@@ -98,5 +98,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "2.0.0"
+  "version": "2.0.1"
 }
