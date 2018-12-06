@@ -70,7 +70,7 @@ public class OGWaveView extends FrameLayout {
 
 
         }else{
-            if(mMediaPlayer.isPlaying())
+            if(mMediaPlayer != null && mMediaPlayer.isPlaying())
                 mMediaPlayer.pause();
 
         }
@@ -167,7 +167,7 @@ public class OGWaveView extends FrameLayout {
 
         public void run() {
             try {
-                if (mMediaPlayer.isPlaying()) {
+                if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
                     new UpdateProgressRequest().execute();
 
                     // seconds
