@@ -17,26 +17,22 @@
 package com.ringdroid;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.View;
 
 import com.facebook.react.bridge.ReactContext;
+import com.otomogroove.OGReactNativeWaveform.OGWaveView;
 import com.ringdroid.soundfile.SoundFile;
 
 import java.io.BufferedInputStream;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,8 +41,6 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.net.URLConnection;
 import java.security.SecureRandom;
-
-import static com.facebook.react.common.ReactConstants.TAG;
 
 /**
  * WaveformView is an Android view that displays a visual representation
@@ -66,14 +60,6 @@ public class WaveformView extends View {
         this.mURI = mURI;
         String filePath = Environment.getExternalStorageDirectory().toString() + "/"+random()+".mp3";
         new DownloadFileFromURL().execute(this.mURI,filePath);
-
-
-
-
-
-
-
-
     }
 
     public void setmWaveColor(int mWaveColor) {
@@ -149,6 +135,7 @@ public class WaveformView extends View {
 
             } catch (Exception e) {
                 Log.e("XSXGOT Error: ", e.getMessage());
+                filePath = f_url[0];
             }
 
             try {
@@ -159,9 +146,11 @@ public class WaveformView extends View {
                 e.printStackTrace();
             }
 
-            File f0 = new File(filePath);
-            boolean d0 = f0.delete();
-            Log.w("Delete Check", "File deleted: " + d0);
+            // Can't delete file as it's used for the media player
+//
+//            File f0 = new File(filePath);
+//            boolean d0 = f0.delete();
+//            Log.w("Delete Check", "File deleted: " + d0);
 
             return soundFile;
         }
@@ -242,9 +231,12 @@ public class WaveformView extends View {
     private ScaleGestureDetector mScaleGestureDetector;
     private boolean mInitialized;
     private int mWaveColor;
+    private OGWaveView waveView;
 
-    public WaveformView(Context context) {
+    public WaveformView(Context context, OGWaveView waveView) {
         super(context);
+
+        this.waveView = waveView;
 
         // We don't want keys, the markers get these
         setFocusable(false);
@@ -308,6 +300,8 @@ public class WaveformView extends View {
         mSamplesPerFrame = mSoundFile.getSamplesPerFrame();
         computeDoublesForAllZoomLevels();
         mHeightsAtThisZoomLevel = null;
+
+        waveView.setSoundFile(soundFile);
     }
 
     public boolean isInitialized() {

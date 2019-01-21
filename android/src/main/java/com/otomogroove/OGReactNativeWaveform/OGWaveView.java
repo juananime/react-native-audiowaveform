@@ -1,6 +1,5 @@
 package com.otomogroove.OGReactNativeWaveform;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
@@ -12,6 +11,7 @@ import android.widget.FrameLayout;
 
 import com.facebook.react.bridge.ReactContext;
 import com.ringdroid.WaveformView;
+import com.ringdroid.soundfile.SoundFile;
 
 import java.io.IOException;
 
@@ -35,6 +35,7 @@ public class OGWaveView extends FrameLayout {
     private int mScrubColor;
 
     private boolean mAutoplay = false;
+    private boolean isCreated = false;
 
 
 
@@ -43,7 +44,7 @@ public class OGWaveView extends FrameLayout {
         super(context);
         mContext = context;
 
-        mWaveView = new WaveformView(mContext);
+        mWaveView = new WaveformView(mContext, this);
         mUIWave = new OGUIWaveView(mContext);
 
 
@@ -69,8 +70,8 @@ public class OGWaveView extends FrameLayout {
 
 
         }else{
-            if(mMediaPlayer.isPlaying())
-                    mMediaPlayer.pause();
+            if(mMediaPlayer != null && mMediaPlayer.isPlaying())
+                mMediaPlayer.pause();
 
         }
 
@@ -96,23 +97,8 @@ public class OGWaveView extends FrameLayout {
 
     }
 
-    public void setURI(String uri){
-        // Create the MediaPlayer
-
-        this.mWaveView.setmURI(uri);
-
-        mMediaPlayer= new MediaPlayer();
-        try {
-            mMediaPlayer.setDataSource(uri);
-            mMediaPlayer.prepare();
-
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Log.e(TAG, "setURI: mMediaPlayer is"+mMediaPlayer.getDuration());
+    public void createMediaPlayer() {
+        mMediaPlayer = new MediaPlayer();
 
         addView(this.mWaveView);
         addView(this.mUIWave);
@@ -131,8 +117,37 @@ public class OGWaveView extends FrameLayout {
             }
 
         });
+    }
 
+    public void setURI(String uri){
+        // Create the MediaPlayer
 
+        Log.d("XSXGOT", "Setting URI to: " + uri);
+
+        if (uri.isEmpty()) {
+            Log.d("XSXGOT", "URI is empty");
+            return;
+        }
+
+        this.mWaveView.setmURI(uri);
+
+        if (!isCreated) {
+            isCreated = true;
+            createMediaPlayer();
+        }
+    }
+
+    public void setSoundFile(SoundFile soundFile) {
+        try {
+            Log.d("XSXGOT", "Setting datasource to: " + soundFile.getInputFile().getPath());
+            mMediaPlayer.reset();
+            mMediaPlayer.setDataSource(soundFile.getInputFile().getPath());
+            mMediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Log.e(TAG, "setURI: mMediaPlayer is"+mMediaPlayer.getDuration());
     }
 
     private WaveformView.WaveformListener waveformListener;
@@ -152,7 +167,7 @@ public class OGWaveView extends FrameLayout {
 
         public void run() {
             try {
-                if (mMediaPlayer.isPlaying()) {
+                if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
                     new UpdateProgressRequest().execute();
 
                     // seconds

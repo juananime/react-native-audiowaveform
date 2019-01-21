@@ -6,7 +6,7 @@
 //  Copyright © 2017 Facebook. All rights reserved.
 //
 
-#import "RCTViewManager.h"
+#import <React/RCTViewManager.h>
 #import "OGWaveDelegateProtocol.h"
 
 @interface OGWaveManager : RCTViewManager 
