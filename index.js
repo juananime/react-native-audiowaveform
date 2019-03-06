@@ -9,13 +9,15 @@ import { Platform, processColor, DeviceEventEmitter, requireNativeComponent } fr
 
 import resolveAssetSource from "react-native/Libraries/Image/resolveAssetSource";
 
-type StateType = { componentID: number };
+type StateType = { componentID: string };
 
 export default class WaveForm extends PureComponent<WaveObjectPropsType, StateType> {
   constructor(props) {
     super(props);
     this._onPress = this._onPress.bind(this);
+    this._onFinishPlay = this._onFinishPlay.bind(this);
   }
+
   _makeid() {
     var text = "";
     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -25,25 +27,23 @@ export default class WaveForm extends PureComponent<WaveObjectPropsType, StateTy
     return text;
   }
 
-  _onPress = e => {
-    if (Platform.OS === "ios") {
-      if (!this.props.onPress) {
-        return;
-      }
-
-      this.props.onPress(e) && this.props.onPress;
-    } else {
-      if (e.componentID == this.state.componentID) {
-        if (!this.props.onPress) {
-          return;
-        }
-
-        this.props.onPress(e) && this.props.onPress;
-      }
+  _onPress(e) {
+    const event = Platform.OS === "ios" ? e.nativeEvent : e;
+    if (event.componentID === this.state.componentID && this.props.onPress) {
+      this.props.onPress(event);
     }
-  };
+  }
+
+  _onFinishPlay(e) {
+    const event = Platform.OS === "ios" ? e.nativeEvent : e;
+    if (event.componentID === this.state.componentID && this.props.onFinishPlay) {
+      this.props.onFinishPlay(event);
+    }
+  }
+
   componentWillMount() {
     DeviceEventEmitter.addListener("OGOnPress", this._onPress);
+    DeviceEventEmitter.addListener("OGFinishPlay", this._onFinishPlay);
     const componentID = this._makeid();
     this.setState({ componentID });
   }
@@ -79,7 +79,7 @@ export default class WaveForm extends PureComponent<WaveObjectPropsType, StateTy
       componentID
     };
 
-    return <OGWaverformView {...nativeProps} onPress={this._onPress} />;
+    return <OGWaverformView {...nativeProps} onPress={this._onPress} onFinishPlay={this._onFinishPlay} />;
   }
 }
 
