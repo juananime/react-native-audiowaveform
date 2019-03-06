@@ -117,6 +117,16 @@ public class OGWaveView extends FrameLayout {
             }
 
         });
+
+
+        this.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                waveformListener.waveformFinishPlay(mContext, componentID);
+            }
+
+        });
     }
 
     public void setURI(String uri){

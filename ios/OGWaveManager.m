@@ -19,11 +19,13 @@ RCT_EXPORT_VIEW_PROPERTY(autoPlay, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(play, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(stop, BOOL);
 RCT_EXPORT_VIEW_PROPERTY(volume, float);
-RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock)
+RCT_EXPORT_VIEW_PROPERTY(componentID, NSString);
+RCT_EXPORT_VIEW_PROPERTY(onPress, RCTBubblingEventBlock);
+RCT_EXPORT_VIEW_PROPERTY(onFinishPlay, RCTBubblingEventBlock);
 
 - (UIView *)view
 {
-    
+
     OGWaverformView *OGWaveformView =  [[OGWaverformView alloc] initWithBridge:self.bridge];
     [OGWaveformView setDelegate:self];
     return OGWaveformView;
@@ -36,10 +38,16 @@ RCT_EXPORT_MODULE();
 }
 
 #pragma mark OGWaveDelegateProtocol
--(void)OGWaveOnTouch:(OGWaverformView *)waveformView{
+-(void)OGWaveOnTouch:(OGWaverformView *)waveformView componentID:(NSString *)componentID{
     if(!waveformView.onPress)
         return;
-    
-    waveformView.onPress(@{@"onPress":@"true",@"currentStatus":@"playing"});
+
+    waveformView.onPress(@{@"onPress":@"true",@"currentStatus":@"playing",@"componentID":componentID});
+}
+-(void)OGWaveFinishPlay:(OGWaverformView *)waveformView componentID:(NSString *)componentID{
+    if(!waveformView.onFinishPlay)
+        return;
+
+    waveformView.onFinishPlay(@{@"onFinishPlay":@"true",@"currentStatus":@"stopped",@"componentID":componentID});
 }
 @end

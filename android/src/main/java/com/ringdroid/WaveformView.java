@@ -190,6 +190,7 @@ public class WaveformView extends View {
 
     public interface WaveformListener {
         public void waveformTouchStart(ReactContext context, String componentID);
+        public void waveformFinishPlay(ReactContext context, String componentID);
         public void waveformTouchStart(float x);
         public void waveformTouchMove(float x);
         public void waveformTouchEnd();

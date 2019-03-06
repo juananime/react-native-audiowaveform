@@ -18,7 +18,7 @@
     Float32 _normalizeMax;
     float _imageHeight;
     float _imageWidth;
-    
+
     Float32 *_samples;
     CGSize _graphSize;
 }
@@ -35,6 +35,7 @@ typedef enum {
 @property(nonatomic) NSMutableData * mdata;
 @property(nonatomic) NSDictionary * src;
 @property(nonatomic) float volume;
+@property(nonatomic) NSString *componentID;
 @property(nonatomic) BOOL autoPlay;
 @property(nonatomic) BOOL play;
 @property(nonatomic) BOOL stop;
@@ -52,6 +53,7 @@ typedef enum {
 @property(nonatomic) NSTimer * playbackTimer;
 @property(nonatomic) id<OGWaveDelegateProtocol> delegate;
 @property (nonatomic, copy) RCTBubblingEventBlock onPress;
+@property (nonatomic, copy) RCTBubblingEventBlock onFinishPlay;
 //@property(nonatomic) NSDictionary * propSrc;
 
 //@property (nonatomic, strong) AVAudioPlayer *_audioPlayer;
