@@ -11,7 +11,8 @@
 
 @protocol OGWaveDelegateProtocol <NSObject>
 
--(void)OGWaveOnTouch:(OGWaverformView *)waveformView;
+-(void)OGWaveOnTouch:(OGWaverformView *)waveformView componentID:(NSString *)componentID;
+-(void)OGWaveFinishPlay:(OGWaverformView *)waveformView componentID:(NSString *)componentID;
 
 @end
 
