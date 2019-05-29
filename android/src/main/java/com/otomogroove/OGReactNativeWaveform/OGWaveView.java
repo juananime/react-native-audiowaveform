@@ -27,6 +27,7 @@ public class OGWaveView extends FrameLayout {
     private final OGUIWaveView mUIWave;
     private MediaPlayer mMediaPlayer;
     private WaveformView mWaveView;
+    private SoundFile soundFile;
 
     private String componentID;
 
@@ -147,7 +148,13 @@ public class OGWaveView extends FrameLayout {
         }
     }
 
+    public SoundFile getSoundFile() {
+        return soundFile;
+    }
+
     public void setSoundFile(SoundFile soundFile) {
+        this.soundFile = soundFile;
+
         try {
             Log.d("XSXGOT", "Setting datasource to: " + soundFile.getInputFile().getPath());
             mMediaPlayer.reset();
