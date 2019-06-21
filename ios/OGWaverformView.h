@@ -28,7 +28,6 @@ typedef enum {
     DSWaveformStyleFull = 1
 } DSWaveformStyle;
 
-
 @property(nonatomic) UIColor *graphColor;
 @property(nonatomic) DSWaveformStyle style;
 

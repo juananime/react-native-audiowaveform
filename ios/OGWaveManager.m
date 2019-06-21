@@ -10,7 +10,6 @@
 #import "OGWaverformView.h"
 #import <React/UIView+React.h>
 
-
 @implementation OGWaveManager
 
 RCT_EXPORT_VIEW_PROPERTY(waveFormStyle, NSDictionary);
@@ -25,7 +24,6 @@ RCT_EXPORT_VIEW_PROPERTY(onFinishPlay, RCTBubblingEventBlock);
 
 - (UIView *)view
 {
-
     OGWaverformView *OGWaveformView =  [[OGWaverformView alloc] initWithBridge:self.bridge];
     [OGWaveformView setDelegate:self];
     return OGWaveformView;

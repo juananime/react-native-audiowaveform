@@ -21,17 +21,13 @@ public class OGUIWaveView extends View {
 
     public OGUIWaveView(Context context) {
         super(context);
-
     }
-
-
-
 
     public void updatePlayHead(float currentSeek){
         mCurrentSeek = currentSeek;
-
         invalidate();
     }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -49,7 +45,5 @@ public class OGUIWaveView extends View {
         paint.setStrokeWidth(8);
         paint.setAntiAlias(true);
         canvas.drawLine(currrentXPos, 0, currrentXPos, canvas.getHeight(), paint);
-
     }
-
 }

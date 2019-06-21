@@ -23,7 +23,6 @@ import static com.facebook.react.common.ReactConstants.TAG;
 
 public class OGWaveView extends FrameLayout {
 
-
     private final OGUIWaveView mUIWave;
     private MediaPlayer mMediaPlayer;
     private WaveformView mWaveView;
@@ -37,9 +36,6 @@ public class OGWaveView extends FrameLayout {
     private boolean mAutoplay = false;
     private boolean isCreated = false;
 
-
-
-
     public OGWaveView(ReactContext context) {
         super(context);
         mContext = context;
@@ -47,17 +43,13 @@ public class OGWaveView extends FrameLayout {
         mWaveView = new WaveformView(mContext, this);
         mUIWave = new OGUIWaveView(mContext);
 
-
         mUIWave.setBackgroundColor(Color.TRANSPARENT);
-
-
     }
+
     public void setmWaveColor(int mWaveColor) {
-
         this.mWaveView.setmWaveColor(mWaveColor);
-
-
     }
+
     public void setScrubColor(int scrubcolor){
         mScrubColor = scrubcolor;
         mUIWave.scrubColor=this.mScrubColor;
@@ -67,20 +59,18 @@ public class OGWaveView extends FrameLayout {
     public void onPlay(boolean play){
         if(play){
             this.mMediaPlayer.start();
-
-
         }else{
             if(mMediaPlayer != null && mMediaPlayer.isPlaying())
                 mMediaPlayer.pause();
-
         }
 
         progressReportinghandler.postDelayed(progressRunnable, 500);
-
     }
+
     public void onPause(){
         this.mMediaPlayer.pause();
     }
+
     public void onStop(){
         this.mMediaPlayer.stop();
     }
@@ -94,7 +84,6 @@ public class OGWaveView extends FrameLayout {
         }
 
         progressReportinghandler.postDelayed(progressRunnable, 500);
-
     }
 
     public void createMediaPlayer() {
@@ -104,7 +93,6 @@ public class OGWaveView extends FrameLayout {
         addView(this.mUIWave);
 
         this.mWaveView.setOnTouchListener(new OnTouchListener(){
-
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
@@ -115,17 +103,13 @@ public class OGWaveView extends FrameLayout {
 
                 return true;
             }
-
         });
 
-
         this.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
             @Override
             public void onCompletion(MediaPlayer mp) {
                 waveformListener.waveformFinishPlay(mContext, componentID);
             }
-
         });
     }
 
@@ -162,8 +146,6 @@ public class OGWaveView extends FrameLayout {
 
     private WaveformView.WaveformListener waveformListener;
 
-
-
     public WaveformView.WaveformListener getWaveformListener() {
         return waveformListener;
     }
@@ -174,12 +156,10 @@ public class OGWaveView extends FrameLayout {
 
     private Handler progressReportinghandler = new Handler();
     private Runnable progressRunnable = new Runnable() {
-
         public void run() {
             try {
                 if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
                     new UpdateProgressRequest().execute();
-
                     // seconds
                     progressReportinghandler.postDelayed(progressRunnable, 100);
                 }
@@ -197,17 +177,12 @@ public class OGWaveView extends FrameLayout {
         this.componentID = componentID;
     }
 
-
     protected class UpdateProgressRequest extends AsyncTask<Void, Void, Float> {
-
         @Override
         protected Float doInBackground(Void... params) {
-
             if (mMediaPlayer.isPlaying()) {
                 String offset = Integer.valueOf(
                         mMediaPlayer.getCurrentPosition()).toString();
-
-
 
                 Float currrentPos = (float) mMediaPlayer.getCurrentPosition()/mMediaPlayer.getDuration();
 
@@ -219,12 +194,7 @@ public class OGWaveView extends FrameLayout {
         @Override
         protected void onPostExecute(Float aFloat) {
             super.onPostExecute(aFloat);
-
-
             mUIWave.updatePlayHead(aFloat);
         }
     }
-
-
-
 }
