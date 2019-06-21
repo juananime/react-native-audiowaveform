@@ -13,7 +13,6 @@
 
 @implementation OGWaverformView {
     __weak RCTBridge *_bridge;
-
 }
 
 #define absX(x) (x<0?0-x:x)
@@ -40,7 +39,6 @@
         [self drawWaveform];
 
     [self addScrubber];
-
 }
 
 -(void)addScrubber{
@@ -92,7 +90,6 @@
     NSLog(@"play finished ::: %@",_soundPath);
     [_player seekToTime:CMTimeMake(0,1)];
     [_delegate OGWaveFinishPlay:self componentID:_componentID];
-
 }
 
 -(void)setAutoPlay:(BOOL)autoPlay{
@@ -117,18 +114,17 @@
     _playbackTimer = nil;
 }
 -(void)playAudio{
-
     _playbackTimer=[NSTimer scheduledTimerWithTimeInterval:0.1
-                                                   target:self
-                                                 selector:@selector(updateProgress:)
-                                                 userInfo:nil
-                                                  repeats:YES];
+                                                    target:self
+                                                  selector:@selector(updateProgress:)
+                                                  userInfo:nil
+                                                   repeats:YES];
     [_player play];
 }
 
 -(void)setStop:(BOOL)stop{
-    if(stop){
-        //[_player stop];
+    if (stop) {
+        [self pauseAudio];
     }
 }
 
@@ -194,18 +190,14 @@
     _asset = [AVURLAsset assetWithURL: localUrl];
 
     [self drawWaveform];
-
     [self addScrubber];
-
     [self initAudio];
 
     if(_autoPlay)
         [self playAudio];
-
 }
 
 -(UIView *)getPlayerScrub{
-
     UIView *viewAux = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 2,self.frame.size.height )];
     [viewAux setBackgroundColor:_scrubColor];
     return viewAux;
@@ -230,7 +222,6 @@
 
     NSLog(@"LColor : %@",_waveColor);
     CGColorRef wavecolor = [_waveColor CGColor];
-
 
     CGContextFillRect(context, rect);
 
@@ -268,8 +259,6 @@
     return newImage;
 }
 
-
-
 - (NSData *) renderPNGAudioPictogramLogForAssett:(AVURLAsset *)songAsset {
 
     NSError * error = nil;
@@ -281,22 +270,18 @@
     AVAssetTrack * songTrack = [songAsset.tracks objectAtIndex:0];
 
     NSDictionary* outputSettingsDict = [[NSDictionary alloc] initWithObjectsAndKeys:
-
                                         [NSNumber numberWithInt:kAudioFormatLinearPCM],AVFormatIDKey,
                                         //     [NSNumber numberWithInt:44100.0],AVSampleRateKey, /*Not Supported*/
                                         //     [NSNumber numberWithInt: 2],AVNumberOfChannelsKey,    /*Not Supported*/
-
                                         [NSNumber numberWithInt:16],AVLinearPCMBitDepthKey,
                                         [NSNumber numberWithBool:NO],AVLinearPCMIsBigEndianKey,
                                         [NSNumber numberWithBool:NO],AVLinearPCMIsFloatKey,
                                         [NSNumber numberWithBool:NO],AVLinearPCMIsNonInterleaved,
-
                                         nil];
 
     if(error){
         NSLog(@"ERROROR : %@",error.description);
     }
-
 
     AVAssetReaderTrackOutput* output = [[AVAssetReaderTrackOutput alloc] initWithTrack:songTrack outputSettings:outputSettingsDict];
 
@@ -308,10 +293,8 @@
         CMAudioFormatDescriptionRef item = (__bridge CMAudioFormatDescriptionRef)[formatDesc objectAtIndex:i];
         const AudioStreamBasicDescription* fmtDesc = CMAudioFormatDescriptionGetStreamBasicDescription (item);
         if(fmtDesc ) {
-
             sampleRate = fmtDesc->mSampleRate;
             channelCount = fmtDesc->mChannelsPerFrame;
-
             //    NSLog(@"channels:%u, bytes/packet: %u, sampleRate %f",fmtDesc->mChannelsPerFrame, fmtDesc->mBytesPerPacket,fmtDesc->mSampleRate);
         }
     }
@@ -341,12 +324,8 @@
             size_t length = CMBlockBufferGetDataLength(blockBufferRef);
             totalBytes += length;
 
-
-
-
             NSMutableData * data = [NSMutableData dataWithLength:length];
             CMBlockBufferCopyDataBytes(blockBufferRef, 0, length, data.mutableBytes);
-
 
             SInt16 * samples = (SInt16 *) data.mutableBytes;
             int sampleCount = length / bytesPerSample;
@@ -357,8 +336,6 @@
                 left = minMaxX(left,noiseFloor,0);
 
                 totalLeft  += left;
-
-
 
                 Float32 right;
                 if (channelCount==2) {
@@ -384,7 +361,6 @@
                     if (channelCount==2) {
                         right = totalRight / sampleTally;
 
-
                         if (right > normalizeMax) {
                             normalizeMax = right;
                         }
@@ -395,14 +371,10 @@
                     totalLeft   = 0;
                     totalRight  = 0;
                     sampleTally = 0;
-
                 }
             }
 
-
-
             CMSampleBufferInvalidate(sampleBufferRef);
-
             CFRelease(sampleBufferRef);
         }
     }
@@ -433,37 +405,18 @@
     return finalData;
 }
 
-
-
 - (instancetype)initWithBridge:(RCTBridge *)bridge
 {
     if ((self = [super init])) {
         _bridge = bridge;
         _isFrameReady = NO;
-
-
     }
     return self;
 }
 
-
-
-
 #pragma mark OGWaveDelegateProtocol
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
-
     [_delegate OGWaveOnTouch:self componentID:_componentID];
 }
-
-
-
-
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
 
 @end

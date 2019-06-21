@@ -64,7 +64,6 @@ public class WaveformView extends View {
 
     public void setmWaveColor(int mWaveColor) {
         this.mWaveColor = mWaveColor;
-
         mUnselectedLinePaint.setColor(this.mWaveColor);
     }
 
@@ -73,16 +72,12 @@ public class WaveformView extends View {
      * */
     class DownloadFileFromURL extends AsyncTask<String, String, SoundFile> {
 
-
-
-
         /**
          * Before starting background thread Show Progress Bar Dialog
          * */
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
         }
 
         /**
@@ -103,10 +98,7 @@ public class WaveformView extends View {
                 int lenghtOfFile = conection.getContentLength();
 
                 // download the file
-                InputStream input = new BufferedInputStream(url.openStream(),
-                        8192);
-
-
+                InputStream input = new BufferedInputStream(url.openStream(), 8192);
 
                 // Output stream
                 OutputStream output = new FileOutputStream(filePath);
@@ -160,10 +152,7 @@ public class WaveformView extends View {
          * */
         protected void onProgressUpdate(String... progress) {
             // setting progress percentage
-
         }
-
-
 
         /**
          * After completing background task Dismiss the progress dialog
@@ -178,13 +167,10 @@ public class WaveformView extends View {
             }else{
                 Log.e("XSXGOT","soundfile is null");
             }
-
         }
-
     }
 
-
-    private   String random() {
+    private String random() {
         return new BigInteger(130, new SecureRandom()).toString(32);
     }
 
@@ -273,10 +259,6 @@ public class WaveformView extends View {
         mTimecodePaint.setColor(Color.BLUE);
         mTimecodePaint.setShadowLayer(2, 1, 1, Color.GRAY);
 
-
-
-
-
         mSoundFile = null;
         mLenByZoomLevel = null;
         mValuesByZoomLevel = null;
@@ -288,8 +270,6 @@ public class WaveformView extends View {
         mDensity = 1.0f;
         mInitialized = false;
     }
-
-
 
     public boolean hasSoundFile() {
         return mSoundFile != null;
@@ -308,8 +288,6 @@ public class WaveformView extends View {
     public boolean isInitialized() {
         return mInitialized;
     }
-
-
 
     public void setZoomLevel(int zoomLevel) {
         while (mZoomLevel > zoomLevel) {
@@ -432,15 +410,11 @@ public class WaveformView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-
         if (mSoundFile == null)
             return;
 
         if (mHeightsAtThisZoomLevel == null)
             computeIntsForThisZoomLevel();
-
-
-
 
         // Draw waveform
         int measuredWidth = getMeasuredWidth();
@@ -453,14 +427,10 @@ public class WaveformView extends View {
         if (width > measuredWidth)
             width = measuredWidth;
 
-
         int i = 0;
         // Draw waveform
 
-
-
         for (i = 0; i < measuredWidth; i++) {
-
             int stretchedwidthPos =  Math.round((i*width)/measuredWidth);
             Paint paint;
 
@@ -471,19 +441,13 @@ public class WaveformView extends View {
                     ctr - mHeightsAtThisZoomLevel[start + stretchedwidthPos],
                     ctr + 1 + mHeightsAtThisZoomLevel[start + stretchedwidthPos],
                     paint);
-
-
         }
-
-
     }
 
     /**
      * Called once when a new sound file is added
      */
     private void computeDoublesForAllZoomLevels() {
-
-
         Log.e("XSXGOT","computeDoublesForAllZoomLevels");
         int numFrames = mSoundFile.getNumFrames();
         int[] frameGains = mSoundFile.getFrameGains();

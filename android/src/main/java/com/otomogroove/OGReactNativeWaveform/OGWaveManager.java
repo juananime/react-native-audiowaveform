@@ -3,7 +3,6 @@ package com.otomogroove.OGReactNativeWaveform;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.LifecycleEventListener;
@@ -17,7 +16,6 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.ringdroid.WaveformView;
 
-
 import static com.facebook.react.common.ReactConstants.TAG;
 
 /**
@@ -26,9 +24,6 @@ import static com.facebook.react.common.ReactConstants.TAG;
 
 public class OGWaveManager extends SimpleViewManager<OGWaveView> implements LifecycleEventListener,WaveformView.WaveformListener {
 
-
-
-
     private Callback onPressCallback;
     public static final String REACT_CLASS = "OGWave";
     private ReactContext mcontext;
@@ -36,11 +31,8 @@ public class OGWaveManager extends SimpleViewManager<OGWaveView> implements Life
 
     @Override
     public String getName() {
-
         return REACT_CLASS;
     }
-
-
 
     @Override
     public OGWaveView createViewInstance(ThemedReactContext context) {
@@ -49,9 +41,7 @@ public class OGWaveManager extends SimpleViewManager<OGWaveView> implements Life
 
        // deleteFiles(Environment.getExternalStorageDirectory().toString(),"mp3");
         OGWaveView mWaveView = new OGWaveView(context);
-
         mWaveView.setWaveformListener(this);
-
 
         return mWaveView;
     }
@@ -64,7 +54,6 @@ public class OGWaveManager extends SimpleViewManager<OGWaveView> implements Life
 
     @ReactMethod
     public void testCallback(Callback cb) {
-
         Log.e("XSXGOT","TESXT CA:LBACK CALLED!!! ");
         String sampleText = "Java is fun";
         int textLength = sampleText.length();
@@ -84,10 +73,7 @@ public class OGWaveManager extends SimpleViewManager<OGWaveView> implements Life
     public void setComponentID(OGWaveView view, String componentID) {
         Log.e("XSXGOT","componentID SETTED:::!!!!" +componentID);
         view.setComponentID(componentID);
-
     }
-
-
 
     @ReactProp(name = "autoPlay", defaultBoolean = false)
     public void setAutoPlay(OGWaveView view, boolean autoPlay) {
@@ -95,35 +81,30 @@ public class OGWaveManager extends SimpleViewManager<OGWaveView> implements Life
         view.setAutoPlay(autoPlay);
     }
 
-
     @ReactProp(name = "waveFormStyle")
     public void setWaveFormStyle(OGWaveView view, @Nullable ReadableMap waveFormStyle) {
-
-
         view.setmWaveColor(waveFormStyle.getInt("ogWaveColor"));
         view.setScrubColor(waveFormStyle.getInt("ogScrubColor"));
     }
     @ReactProp(name = "play")
     public void setPlay(OGWaveView view, @Nullable boolean play) {
-
-            view.onPlay(play);
-
+        view.onPlay(play);
     }
 
-
+    @ReactProp(name = "stop")
+    public void setStop(OGWaveView view, @Nullable boolean stop){
+        view.onStop(stop);
+    }
 
    /** @ReactProp(name = "pause")
     public void setPause(OGWaveView view, @Nullable Callback pause){
        // view.onPlay();
-
     }
 
     @ReactProp(name = "stop")
     public void setStop(OGWaveView view, @Nullable Callback stop){
         //view.onPlay();
-
     }**/
-
 
     @Override
     public void onHostResume() {
@@ -148,22 +129,18 @@ public class OGWaveManager extends SimpleViewManager<OGWaveView> implements Life
 
     @Override
     public void waveformTouchStart(ReactContext context, String componentID) {
-
         WritableMap map = Arguments.createMap();
         map.putString("componentID",componentID);
         sendEvent(context, "OGOnPress",map);
         Log.e("OGTAGDEBUG::", "waveformTouchStart: " );
-
     }
 
     @Override
     public void waveformFinishPlay(ReactContext context, String componentID) {
-
         WritableMap map = Arguments.createMap();
         map.putString("componentID",componentID);
         sendEvent(context, "OGFinishPlay",map);
         Log.e("OGTAGDEBUG::", "waveformFinishPlay: " );
-
     }
 
     @Override
@@ -201,4 +178,3 @@ public class OGWaveManager extends SimpleViewManager<OGWaveView> implements Life
 
     }
 }
-

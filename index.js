@@ -1,6 +1,7 @@
 /**
  * Created by juanjimenez on 07/12/2016.
  * Otomogroove ltd 2017
+ * Updated by Akio Takei @ 21/06/2019
  */
 
 "use strict";
