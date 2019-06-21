@@ -57,10 +57,10 @@ public class OGWaveView extends FrameLayout {
     }
 
     public void onPlay(boolean play){
-        if(play){
+        if (play) {
             this.mMediaPlayer.start();
-        }else{
-            if(mMediaPlayer != null && mMediaPlayer.isPlaying())
+        } else {
+            if (mMediaPlayer != null && mMediaPlayer.isPlaying())
                 mMediaPlayer.pause();
         }
 
@@ -71,8 +71,10 @@ public class OGWaveView extends FrameLayout {
         this.mMediaPlayer.pause();
     }
 
-    public void onStop(){
-        this.mMediaPlayer.stop();
+    public void onStop(boolean stop) {
+        if (stop) {
+            this.mMediaPlayer.stop();
+        }
     }
 
     public void setAutoPlay(boolean autoplay){
