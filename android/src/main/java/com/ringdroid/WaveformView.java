@@ -457,21 +457,18 @@ public class WaveformView extends View {
         int i = 0;
         // Draw waveform
 
-
-
         for (i = 0; i < measuredWidth; i++) {
 
-            int stretchedwidthPos =  Math.round((i*width)/measuredWidth);
-            Paint paint;
+            int pos =  start + Math.round((i*width)/measuredWidth);
 
-            paint = mUnselectedLinePaint;
-
-            drawWaveformLine(
-                    canvas, i,
-                    ctr - mHeightsAtThisZoomLevel[start + stretchedwidthPos],
-                    ctr + 1 + mHeightsAtThisZoomLevel[start + stretchedwidthPos],
-                    paint);
-
+            if (pos < mHeightsAtThisZoomLevel.length) {
+                drawWaveformLine(
+                        canvas, i,
+                        ctr - mHeightsAtThisZoomLevel[pos],
+                        ctr + 1 + mHeightsAtThisZoomLevel[pos],
+                        mUnselectedLinePaint
+                );
+            }
 
         }
 
