@@ -13,6 +13,7 @@
 
 @implementation OGWaverformView {
     __weak RCTBridge *_bridge;
+    Boolean isLoaded;
 }
 
 #define absX(x) (x<0?0-x:x)
@@ -114,6 +115,9 @@
     _playbackTimer = nil;
 }
 -(void)playAudio{
+    if (!isLoaded)
+        return;
+
     _playbackTimer=[NSTimer scheduledTimerWithTimeInterval:0.1
                                                     target:self
                                                   selector:@selector(updateProgress:)
@@ -167,6 +171,7 @@
     NSLog(@"NSURLRequest :: %@",remoteUrl);
     NSURLRequest *request = [NSURLRequest requestWithURL:remoteUrl cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:30];
     NSURLConnection *connection = [[NSURLConnection alloc]initWithRequest:request delegate:self startImmediately:YES ];
+    isLoaded = false;
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
@@ -189,6 +194,7 @@
     NSURL * localUrl = [NSURL fileURLWithPath: _soundPath];
     _asset = [AVURLAsset assetWithURL: localUrl];
 
+    isLoaded = true;
     [self drawWaveform];
     [self addScrubber];
     [self initAudio];
