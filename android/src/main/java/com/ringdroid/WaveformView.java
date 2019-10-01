@@ -146,12 +146,6 @@ public class WaveformView extends View {
                 e.printStackTrace();
             }
 
-            // Can't delete file as it's used for the media player
-//
-//            File f0 = new File(filePath);
-//            boolean d0 = f0.delete();
-//            Log.w("Delete Check", "File deleted: " + d0);
-
             return soundFile;
         }
 
