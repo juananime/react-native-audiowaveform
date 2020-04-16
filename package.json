@@ -1,8 +1,6 @@
 {
-  "_args": [
-  ],
+  "_args": [],
   "_from": "react-native-audiowaveform@^1.0.471",
-  "_id": "react-native-audiowaveform@1.0.471",
   "_inCache": true,
   "_location": "/react-native-audiowaveform",
   "_nodeVersion": "7.4.0",
@@ -33,9 +31,7 @@
   "_shrinkwrap": null,
   "_spec": "react-native-audiowaveform@^1.0.471",
   "_where": "/Users/juanjimenez/otomogroove_projects/wavetest/wavetest",
-  "author": {
-    "name": "Otomogroove 2017"
-  },
+  "author": "Otomogroove 2017",
   "bugs": {
     "url": "https://github.com/juananime/react-native-audiowaveform/issues"
   },
@@ -64,12 +60,13 @@
     "react-dom": "^16.0.0-alpha.12",
     "react-native-debugger-utils": "1.0.0"
   },
-  "directories": {},
+  "directories": {
+    "example": "example"
+  },
   "dist": {
     "shasum": "edffd87c688ba4e92955eadd527538f6ac7b282f",
     "tarball": "https://registry.npmjs.org/react-native-audiowaveform/-/react-native-audiowaveform-1.0.471.tgz"
   },
-  "gitHead": "254af600c21b2157f208822f2631ea18d171a5e3",
   "homepage": "https://github.com/juananime/react-native-audiowaveform#readme",
   "keywords": [
     "react-native",
@@ -80,17 +77,13 @@
   "license": "WTFPL",
   "main": "index.js",
   "maintainers": [
-    {
-      "name": "otomogroove",
-      "email": "info@otomogroove.com"
-    }
+    "otomogroove <info@otomogroove.com>"
   ],
   "name": "react-native-audiowaveform",
   "optionalDependencies": {},
   "peerDependencies": {
-    "react-native":"^0.54.0"
+    "react-native": "^0.54.0"
   },
-  "readme": "ERROR: No README data found!",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/juananime/react-native-audiowaveform.git"
@@ -98,5 +91,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "2.0.3"
+  "version": "2.0.5"
 }
