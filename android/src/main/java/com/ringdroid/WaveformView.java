@@ -58,7 +58,7 @@ import java.security.SecureRandom;
 public class WaveformView extends View {
     public void setmURI(String mURI) {
         this.mURI = mURI;
-        String filePath = Environment.getExternalStorageDirectory().toString() + "/"+random()+".mp3";
+        String filePath = tempPath + "/"+random()+".mp3";
         new DownloadFileFromURL().execute(this.mURI,filePath);
     }
 
@@ -227,9 +227,11 @@ public class WaveformView extends View {
     private boolean mInitialized;
     private int mWaveColor;
     private OGWaveView waveView;
-
+    public static String tempPath; 
+    
     public WaveformView(Context context, OGWaveView waveView) {
         super(context);
+        tempPath = context.getFilesDir().getAbsolutePath();
 
         this.waveView = waveView;
 
