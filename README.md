@@ -3,10 +3,6 @@
 
 # react-native-audiowaveform
 
-*** Forked from https://github.com/juananime/react-native-audiowaveform  
-*** Original version needs WRITE_EXTERNAL_STORAGE permission for Android but this one does not need it.  
-
-
 React Native component for visuaization of audio files waveform.
 Basic renderization of audio waveforms with play, autoplay and stop control, as well as progress and scrub control.
 
