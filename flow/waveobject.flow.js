@@ -3,7 +3,7 @@
 /* eslint-disable no-unused-vars  */
 
 type NativeWaveType = {
-    componentID: number
+  componentID: number
 } & WaveObjectPropsType;
 
 type WaveObjectPropsType = {
@@ -13,7 +13,9 @@ type WaveObjectPropsType = {
   stop: boolean,
   style: ?number,
   waveFormStyle: ?WaveformStyleType,
-  onPress: ?Function
+  onPress: ?Function,
+  onFinishPlay: ?Function,
+  earpiece: boolean
 };
 
 type WaveformStyleType = {

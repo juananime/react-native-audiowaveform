@@ -112,6 +112,11 @@ public class OGWaveManager extends SimpleViewManager<OGWaveView> implements Life
 
     }
 
+    @ReactProp(name = "earpiece", defaultBoolean = false)
+    public void setEarpiece(OGWaveView view, boolean earpiece) {
+        view.setEarpiece(earpiece);
+    }
+
 
 
    /** @ReactProp(name = "pause")

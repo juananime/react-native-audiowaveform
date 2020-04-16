@@ -36,6 +36,7 @@ typedef enum {
 @property(nonatomic) NSDictionary * src;
 @property(nonatomic) float volume;
 @property(nonatomic) NSString *componentID;
+@property(nonatomic) BOOL earpiece;
 @property(nonatomic) BOOL autoPlay;
 @property(nonatomic) BOOL play;
 @property(nonatomic) BOOL stop;

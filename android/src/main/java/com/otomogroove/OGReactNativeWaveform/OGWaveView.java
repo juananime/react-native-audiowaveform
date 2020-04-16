@@ -1,6 +1,8 @@
 package com.otomogroove.OGReactNativeWaveform;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -63,6 +65,17 @@ public class OGWaveView extends FrameLayout {
         mScrubColor = scrubcolor;
         mUIWave.scrubColor=this.mScrubColor;
         mUIWave.invalidate();
+    }
+
+    public void setEarpiece(boolean earpiece) {
+        Log.e(TAG, "setEarpiece: " + earpiece);
+        AudioManager mAudioManager = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
+        if (earpiece) {
+            mAudioManager.setSpeakerphoneOn(false);
+        } else {
+            mAudioManager.setSpeakerphoneOn(true);
+        }
     }
 
     public void onPlay(boolean play){
@@ -159,6 +172,7 @@ public class OGWaveView extends FrameLayout {
             Log.d("XSXGOT", "Setting datasource to: " + soundFile.getInputFile().getPath());
             mMediaPlayer.reset();
             mMediaPlayer.setDataSource(soundFile.getInputFile().getPath());
+            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.prepare();
         } catch (IOException e) {
             e.printStackTrace();

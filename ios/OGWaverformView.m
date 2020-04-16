@@ -78,7 +78,10 @@
     NSError *error = nil;
     _player =[[AVPlayer alloc]initWithURL:soundURL];
 
-    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord withOptions:AVAudioSessionCategoryOptionDefaultToSpeaker error: nil];
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+    [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
+    [audioSession setActive:YES error:nil];
 
     // Subscribe to the AVPlayerItem's DidPlayToEndTime notification.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:_player.currentItem];
@@ -95,6 +98,20 @@
     [_player seekToTime:CMTimeMake(0,1)];
     [_delegate OGWaveFinishPlay:self componentID:_componentID];
 
+}
+
+-(void)setEarpiece:(BOOL)earpiece{
+    NSError *error = nil;
+    AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    NSLog(@"Setting earpiece ::: %@", earpiece ? @"YES" : @"NO");
+    if (earpiece) {
+        [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:&error];
+    } else {
+        [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:&error];
+    }
+    if (error) {
+        NSLog(@"Setting earpiece ERROR ::: %@",[error localizedDescription]);
+    }
 }
 
 -(void)setAutoPlay:(BOOL)autoPlay{
