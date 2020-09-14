@@ -86,9 +86,25 @@
     // Subscribe to the AVPlayerItem's DidPlayToEndTime notification.
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:_player.currentItem];
 
+    [[NSNotificationCenter defaultCenter] addObserver:self
+    selector:@selector(applicationWillResignActive:)
+        name:UIApplicationWillResignActiveNotification
+      object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+    selector:@selector(applicationWillResignActive:)
+        name:UIApplicationWillEnterForegroundNotification
+      object:nil];
+
     //_player = [[AVAudioPlayer alloc] initWithContentsOfURL:soundURL fileTypeHint:AVFileTypeAIFF error:&error];
     if (error) {
         NSLog(@"ERROR ::: %@",[error localizedDescription]);
+    }
+}
+
+- (void)applicationWillResignActive:(NSNotification *)notification{
+    if(_player){
+        [_player setRate:0.0];
     }
 }
 
@@ -147,8 +163,16 @@
 
 -(void)setStop:(BOOL)stop{
     if(stop){
-        //[_player stop];
+       [_player pause];
     }
+}
+
+-(void)onStopPlayer:(NSString*)componentID{
+    NSLog(@"_componentID-------------------------%@", _componentID);
+    [_player setRate:0.0];
+    [_player setVolume:0];
+    [_player setMuted:YES];
+    _player = nil;
 }
 
 //Update progress scrubb
@@ -452,7 +476,11 @@
     return finalData;
 }
 
-
+-(void)dealloc{
+    [_player pause];
+    _player = nil;
+    NSLog(@"dealloc-------------------------");
+}
 
 - (instancetype)initWithBridge:(RCTBridge *)bridge
 {
