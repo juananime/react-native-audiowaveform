@@ -5,47 +5,57 @@
 
 "use strict";
 import React, { PureComponent } from "react";
-import { Platform, processColor, DeviceEventEmitter, requireNativeComponent } from "react-native";
+import {
+  Platform,
+  processColor,
+  DeviceEventEmitter,
+  requireNativeComponent,
+  NativeModules
+} from 'react-native';
 
 import resolveAssetSource from "react-native/Libraries/Image/resolveAssetSource";
 
 type StateType = { componentID: string };
+const wave = NativeModules.OGWaveManager;
+
+const _makeid = () => {
+  let text = "";
+  const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < 5; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+};
 
 export default class WaveForm extends PureComponent<WaveObjectPropsType, StateType> {
   constructor(props) {
     super(props);
-    this._onPress = this._onPress.bind(this);
-    this._onFinishPlay = this._onFinishPlay.bind(this);
+    this.state = {
+      componentID: _makeid()
+    };
+
+    DeviceEventEmitter.addListener("OGOnPress", this._onPress);
+    DeviceEventEmitter.addListener("OGFinishPlay", this._onFinishPlay);
   }
 
-  _makeid() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for (var i = 0; i < 5; i++) text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-    return text;
-  }
-
-  _onPress(e) {
+  _onPress = (e) => {
     const event = Platform.OS === "ios" ? e.nativeEvent : e;
     if (event.componentID === this.state.componentID && this.props.onPress) {
       this.props.onPress(event);
     }
   }
 
-  _onFinishPlay(e) {
+  _onFinishPlay = (e) => {
     const event = Platform.OS === "ios" ? e.nativeEvent : e;
     if (event.componentID === this.state.componentID && this.props.onFinishPlay) {
       this.props.onFinishPlay(event);
     }
-  }
+  };
 
-  componentWillMount() {
-    DeviceEventEmitter.addListener("OGOnPress", this._onPress);
-    DeviceEventEmitter.addListener("OGFinishPlay", this._onFinishPlay);
-    const componentID = this._makeid();
-    this.setState({ componentID });
+  componentWillUnmount() {
+    if (wave) {
+      wave.onStopPlay(this.state.componentID, () => {});
+    }
   }
 
   render() {
@@ -79,7 +89,11 @@ export default class WaveForm extends PureComponent<WaveObjectPropsType, StateTy
       componentID
     };
 
-    return <OGWaverformView {...nativeProps} onPress={this._onPress} onFinishPlay={this._onFinishPlay} />;
+    return <OGWaverformView
+        {...nativeProps}
+        onPress={this._onPress}
+        onFinishPlay={this._onFinishPlay}
+    />;
   }
 }
 
