@@ -124,6 +124,12 @@
 
 -(void)setPlay:(BOOL)play{
     if(play){
+        AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+        if([audioSession category] != AVAudioSessionCategoryPlayAndRecord){
+            [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
+            [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
+            [audioSession setActive:YES error:nil];
+        }
         [self playAudio];
     }else{
         [self pauseAudio];
