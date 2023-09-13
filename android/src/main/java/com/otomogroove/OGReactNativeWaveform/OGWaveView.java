@@ -2,9 +2,11 @@ package com.otomogroove.OGReactNativeWaveform;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -69,12 +71,55 @@ public class OGWaveView extends FrameLayout {
 
     public void setEarpiece(boolean earpiece) {
         Log.e(TAG, "setEarpiece: " + earpiece);
-        AudioManager mAudioManager = (AudioManager)mContext.getSystemService(Context.AUDIO_SERVICE);
-        mAudioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
-        if (earpiece) {
-            mAudioManager.setSpeakerphoneOn(false);
+
+        if(this.soundFile == null){
+            return;
+        }
+
+        int length = this.mMediaPlayer.getCurrentPosition();
+        this.mMediaPlayer.release();
+        this.mMediaPlayer = null;
+        this.createMediaPlayer();
+
+        try {
+            this.mMediaPlayer.reset();
+            this.mMediaPlayer.setDataSource(this.soundFile.getInputFile().getPath());
+            if (earpiece) {
+                this.setEarPieceAudioStream();
+            } else {
+               this.setSpeakerAudioStream();
+            }
+            this.mMediaPlayer.prepare();
+            this.mMediaPlayer.start();
+            this.mMediaPlayer.seekTo(length);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setEarPieceAudioStream(){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            this.mMediaPlayer.setAudioAttributes(
+                new AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_VOICE_COMMUNICATION)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .build()
+            );
         } else {
-            mAudioManager.setSpeakerphoneOn(true);
+            this.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+        }
+    }
+
+    private void setSpeakerAudioStream(){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            this.mMediaPlayer.setAudioAttributes(
+                    new AudioAttributes.Builder()
+                            .setUsage(AudioAttributes.USAGE_MEDIA)
+                            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                            .build()
+            );
+        } else {
+            this.mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         }
     }
 
@@ -111,41 +156,35 @@ public class OGWaveView extends FrameLayout {
 
     }
 
-    public void createMediaPlayer() {
-        mMediaPlayer = new MediaPlayer();
-
+    public void setup() {
+        this.createMediaPlayer();
         addView(this.mWaveView);
         addView(this.mUIWave);
-
         this.mWaveView.setOnTouchListener(new OnTouchListener(){
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    Log.e("OGWaveView","LCICK");
-                    waveformListener.waveformTouchStart(mContext, componentID);
-                }
-
-                return true;
+            if(event.getAction() == MotionEvent.ACTION_DOWN){
+                Log.e("OGWaveView","LCICK");
+                waveformListener.waveformTouchStart(mContext, componentID);
             }
-
-        });
-
-
-        this.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                waveformListener.waveformFinishPlay(mContext, componentID);
+            return true;
             }
 
         });
     }
 
-    public void setURI(String uri){
-        // Create the MediaPlayer
+    private void createMediaPlayer() {
+        this.mMediaPlayer = new MediaPlayer();
+        this.mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                waveformListener.waveformFinishPlay(mContext, componentID);
+            }
+        });
+    }
 
+    public void setURI(String uri){
         Log.d("XSXGOT", "Setting URI to: " + uri);
 
         if (uri.isEmpty()) {
@@ -157,7 +196,7 @@ public class OGWaveView extends FrameLayout {
 
         if (!isCreated) {
             isCreated = true;
-            createMediaPlayer();
+            setup();
         }
     }
 
